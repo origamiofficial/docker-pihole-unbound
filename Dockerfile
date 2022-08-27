@@ -80,6 +80,3 @@ RUN chmod +x /unbound.sh
 
 # target run
 CMD ["/unbound.sh"]
-
-# docker healthcheck
-HEALTHCHECK CMD (dig +short +norecurse +retry=0 @127.0.0.1 -p 53 pi.hole && dig +short +norecurse +retry=0 @127.0.0.1 -p 5053 google.com) || exit 1
