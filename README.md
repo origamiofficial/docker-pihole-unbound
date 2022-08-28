@@ -30,7 +30,7 @@ docker run -d --name pihole-unbound \
   rlabinc/pihole-unbound:latest
 ```
 
-This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables)
+This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables). Date tag images aren't the same as the official ones, they're based on the build date.
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
