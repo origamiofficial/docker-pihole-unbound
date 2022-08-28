@@ -1,8 +1,8 @@
 FROM pihole/pihole:latest                                                                                                                               
 
 # set version label
-LABEL docker_pihole_github_repository="https://github.com/pi-hole/pi-hole"
-LABEL docker_unbound_github_repository="https://github.com/MatthewVance/unbound-docker"
+LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole"
+LABEL unbound_github_repository="https://github.com/NLnetLabs/unbound"
 LABEL docker_pihole_unbound_github_repository="https://github.com/origamiofficial/docker-pihole-unbound"
 LABEL maintainer="OrigamiOfficial"
 
