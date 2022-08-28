@@ -1,2 +1,90 @@
-# docker-pihole-unbound
-Pi-Hole &amp; Unbound on the same Docker container
+# pihole-unbound ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest.svg?style=flat&label=image&logo=docker) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
+
+[pihole-unbound](https://github.com/origamiofficial/docker-pihole-unbound) is a Docker container to run [Pi-Hole](https://github.com/pi-hole/pi-hole) & [Unbound](https://github.com/NLnetLabs/unbound) on the same container.
+
+## Supported Architectures
+
+We utilise the docker buildx for multi-platform awareness. More information is available from docker [here](https://docs.docker.com/buildx/working-with-buildx/).
+
+Simply pulling `rlabinc/pihole-unbound:latest` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
+
+The architectures supported by this image are:
+
+| Architecture | Available | Tag |
+| :----: | :----: | ---- |
+| x86-64 | ✅ | amd64-\<version tag\> |
+| arm64 | ✅ | arm64-\<version tag\> |
+| armhf| ✅ | arm32v7-\<version tag\> |
+
+## Usage
+Here are the commands you'll need:
+```bash
+docker run -d --name pihole-unbound \
+  --name=pihole-unbound \
+  -e TZ=Europe/London `#optional` \
+  -p 53:53/tcp -p 53:53/udp \
+  -p 80:80/tcp `#Pi-hole web interface port` \
+  -e WEBPASSWORD='qwerty123' `#better to use single quotes` \
+  -e PIHOLE_DNS_=127.0.0.1#5335 `#do not change this` \
+  --restart=always \
+  rlabinc/pihole-unbound:latest
+```
+
+This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables)
+
+### Installing on Ubuntu
+Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
+The stub resolver should be disabled with: `sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf`
+
+This will not change the nameserver settings, which point to the stub resolver thus preventing DNS resolution. Change the `/etc/resolv.conf` symlink to point to `/run/systemd/resolve/resolv.conf`, which is automatically updated to follow the system's [`netplan`](https://netplan.io/):
+`sudo sh -c 'rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf'`
+After making these changes, you should restart systemd-resolved using `systemctl restart systemd-resolved`
+
+Once pi-hole is installed, you'll want to configure your clients to use it ([see here](https://discourse.pi-hole.net/t/how-do-i-configure-my-devices-to-use-pi-hole-as-their-dns-server/245)). If you used the symlink above, your docker host will either use whatever is served by DHCP, or whatever static setting you've configured. If you want to explicitly set your docker host's nameservers you can edit the netplan(s) found at `/etc/netplan`, then run `sudo netplan apply`.
+Example netplan:
+```yaml
+network:
+    ethernets:
+        ens160:
+            dhcp4: true
+            dhcp4-overrides:
+                use-dns: false
+            nameservers:
+                addresses: [127.0.0.1]
+    version: 2
+```
+
+Note that it is also possible to disable `systemd-resolved` entirely. However, this can cause problems with name resolution in vpns ([see bug report](https://bugs.launchpad.net/network-manager/+bug/1624317)). It also disables the functionality of netplan since systemd-resolved is used as the default renderer ([see `man netplan`](http://manpages.ubuntu.com/manpages/bionic/man5/netplan.5.html#description)). If you choose to disable the service, you will need to manually set the nameservers, for example by creating a new `/etc/resolv.conf`.
+
+Users of older Ubuntu releases (circa 17.04) will need to disable dnsmasq.
+
+## Parameters
+
+Container images are configured using parameters passed at runtime (such as those above).
+
+| Parameter | Function |
+| :----: | --- |
+| `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
+| `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. |
+| `-p 80:80/tcp` | Specify Pi-hole web interface port. |
+| `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. |
+| `-e PIHOLE_DNS_=127.0.0.1#5335` | Pi-hole upstream DNS server to use. DO NOT CHANGE THIS |
+| `--restart=always` | To make sure "It's Always DNS" not happend. |
+
+## Pihole Github Repository
+https://github.com/pi-hole/docker-pi-hole
+
+## Unbound Github Repository
+https://github.com/NLnetLabs/unbound
+
+## Pi-hole Unbound Github Repository
+https://github.com/origamiofficial/docker-pihole-unbound
+
+## Acknowledgements
+Credit for Pi-hole goes to [@pi-hole](https://github.com/pi-hole).
+Credit for  Unbound goes to [@NLnetLabs](https://github.com/NLnetLabs).
+Credit for Unbound Docker goes to [@MatthewVance](https://github.com/MatthewVance).
+
+## Warning
+
+I'm not responsible if your internet goes down using this Docker container. Use at your own risk.
