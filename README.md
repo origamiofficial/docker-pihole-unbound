@@ -84,6 +84,7 @@ https://github.com/origamiofficial/docker-pihole-unbound
 Credit for Pi-hole goes to [@pi-hole](https://github.com/pi-hole).
 Credit for  Unbound goes to [@NLnetLabs](https://github.com/NLnetLabs).
 Credit for Unbound Docker goes to [@MatthewVance](https://github.com/MatthewVance).
+Credit for Pi-hole Unbound Docker configs goes to [@chriscrowe](https://github.com/chriscrowe).
 
 ## Warning
 
