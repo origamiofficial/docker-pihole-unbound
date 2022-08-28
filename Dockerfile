@@ -25,7 +25,7 @@ RUN set -e -x && \
       protobuf-c-compiler \
       libnghttp2-14 \
       libprotobuf-c1 && \
-    git clone https://github.rlabinc.cf/openssl/openssl.git && \
+    git clone https://github.com/openssl/openssl.git && \
     cd openssl && \
     ./config \
       --prefix=/opt/openssl \
@@ -45,7 +45,7 @@ RUN set -e -x && \
 # install unbound
     mkdir /tmp/src && \
     cd /tmp/src && \
-    git clone https://github.rlabinc.cf/NLnetLabs/unbound.git && \
+    git clone https://github.com/NLnetLabs/unbound.git && \
     cd unbound && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
