@@ -220,6 +220,8 @@ server:
     # private-address: fd00::/8
     # private-address: fe80::/10
     # private-address: ::ffff:0:0/96
+    # Allowed private domains
+    private-domain: "plex.direct"
 
     # Enable ratelimiting of queries (per second) sent to nameserver for
     # performing recursion. More queries are turned away with an error

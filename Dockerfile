@@ -1,4 +1,4 @@
-FROM pihole/pihole:latest                                                                                                                               
+FROM pihole/pihole:2022.08.3
 
 # set version label
 LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole"
