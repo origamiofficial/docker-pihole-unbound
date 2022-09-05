@@ -9,6 +9,7 @@ LABEL maintainer="OrigamiOfficial"
 # environment settings
 WORKDIR /tmp/src
 ENV PATH /opt/unbound/sbin:"$PATH"
+ENV PIHOLE_DNS_ 127.0.0.1#5335
 ARG TARGETPLATFORM
 
 # update & install dependencies
