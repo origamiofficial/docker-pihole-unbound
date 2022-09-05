@@ -1,14 +1,12 @@
-# Under Construction
-
 name: Build & Push
 on:
   schedule:
     - cron: '0 7 * * 0'
   push:
     branches:
-      — main
+      - main
     tags:
-      — '*'
+      - '*'
   pull_request:
     branches:
       - main
