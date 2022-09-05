@@ -1,4 +1,4 @@
-FROM pihole/pihole:2022.09.1
+FROM pihole/pihole:2022.09.2
 
 # set version label
 LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole"
