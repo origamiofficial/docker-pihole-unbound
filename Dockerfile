@@ -28,8 +28,8 @@ RUN set -e -x && \
       libprotobuf-c1
 
 # platform specfic command
-RUN if ["$TARGETPLATFORM" = "linux/386"] ; \
-    then apt-get install -y --no-install-recommends gcc-multilib g++-multilib ; fi
+RUN if [ "$TARGETPLATFORM" = "linux/386" ] ; \
+    then set -e -x && apt-get install -y --no-install-recommends gcc-multilib g++-multilib libx11-dev:i386 libx11-dev ; fi
 
 # install openssl
 RUN set -e -x && \
