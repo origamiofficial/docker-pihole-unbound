@@ -3,7 +3,10 @@ on:
   schedule:
     - cron: '0 7 * * 0'
   push:
-    tags: [ * ]
+    branches:
+      — main
+    tags:
+      — '*'
   pull_request:
     branches:
       - main
