@@ -53,8 +53,8 @@ RUN set -e -x && \
 
 # install unbound
 RUN set -e -x && \
-    mkdir /tmp/src && \
-    cd /tmp/src && \
+    mkdir /tmp/workdir && \
+    cd /tmp/workdir && \
     git clone https://github.com/NLnetLabs/unbound.git && \
     cd unbound && \
     groupadd _unbound && \
