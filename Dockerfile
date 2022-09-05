@@ -16,6 +16,8 @@ RUN set -e -x && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps \
       git \
+      gcc-multilib \
+      g++-multilib \
       ca-certificates \
       bsdmainutils \
       ldnsutils \
