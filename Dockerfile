@@ -10,7 +10,7 @@ LABEL maintainer="OrigamiOfficial"
 WORKDIR /tmp/src
 ENV PATH /opt/unbound/sbin:"$PATH"
 
-# update & install openssl
+# update & install dependencies
 RUN set -e -x && \
     build_deps="build-essential dirmngr gnupg libidn2-0-dev libssl-dev gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make bison" && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
@@ -24,7 +24,9 @@ RUN set -e -x && \
       libprotobuf-c-dev \
       protobuf-c-compiler \
       libnghttp2-14 \
-      libprotobuf-c1 && \
+      libprotobuf-c1
+# install openssl
+RUN set -e -x && \
     git clone https://github.com/openssl/openssl.git && \
     cd openssl && \
     ./config \
@@ -41,8 +43,9 @@ RUN set -e -x && \
     rm -rf \
         /tmp/* \
         /var/tmp/* \
-        /var/lib/apt/lists/* && \	
+        /var/lib/apt/lists/*
 # install unbound
+RUN set -e -x && \
     mkdir /tmp/src && \
     cd /tmp/src && \
     git clone https://github.com/NLnetLabs/unbound.git && \
