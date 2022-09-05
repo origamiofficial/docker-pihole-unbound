@@ -9,6 +9,7 @@ LABEL maintainer="OrigamiOfficial"
 # environment settings
 WORKDIR /tmp/src
 ENV PATH /opt/unbound/sbin:"$PATH"
+ARG TARGETPLATFORM
 
 # update & install dependencies
 RUN set -e -x && \
@@ -16,8 +17,6 @@ RUN set -e -x && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps \
       git \
-      gcc-multilib \
-      g++-multilib \
       ca-certificates \
       bsdmainutils \
       ldnsutils \
@@ -27,6 +26,11 @@ RUN set -e -x && \
       protobuf-c-compiler \
       libnghttp2-14 \
       libprotobuf-c1
+
+# platform specfic command
+RUN if ["$TARGETPLATFORM" = "linux/386"] ; \
+    then apt-get install -y --no-install-recommends gcc-multilib g++-multilib ; fi
+
 # install openssl
 RUN set -e -x && \
     git clone https://github.com/openssl/openssl.git && \
@@ -46,6 +50,7 @@ RUN set -e -x && \
         /tmp/* \
         /var/tmp/* \
         /var/lib/apt/lists/*
+
 # install unbound
 RUN set -e -x && \
     mkdir /tmp/src && \
