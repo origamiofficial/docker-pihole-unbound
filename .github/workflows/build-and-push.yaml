@@ -1,5 +1,7 @@
 name: Build & Push
 on:
+  schedule:
+    - cron: '0 7 * * 0'
   push:
     tags:
       - '*'
@@ -11,6 +13,10 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
+      -
+        name: Checkout
+        if: github.event_name != 'schedule'
+        uses: actions/checkout@v3
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -27,6 +33,7 @@ jobs:
           flavor: |
             latest=true
           tags: |
+            type=schedule,pattern={{date 'YYYYMMDD'}}
             type=ref,event=tag
             type=ref,event=pr
       -

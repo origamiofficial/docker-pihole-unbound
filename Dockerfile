@@ -1,4 +1,4 @@
-FROM pihole/pihole:2022.09.2
+FROM pihole/pihole:latest
 
 # set version label
 LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole"
@@ -45,7 +45,7 @@ RUN set -e -x && \
       -DOPENSSL_NO_HEARTBEATS \
       -fstack-protector-strong && \
     make depend && \
-    make && \
+    nproc | xargs -I % make -j% && \
     make install_sw && \
     rm -rf \
         /tmp/* \
