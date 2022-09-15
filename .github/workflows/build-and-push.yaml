@@ -1,7 +1,7 @@
 name: Build & Push
 on:
   schedule:
-    - cron: '0 3 * * 0'
+    - cron: '30 3 * * *'
   push:
     tags:
       - '*'
