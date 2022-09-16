@@ -2,12 +2,6 @@ name: Build & Push
 on:
   schedule:
     - cron: '30 3 * * *'
-  push:
-    tags:
-      - '*'
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build-and-publish:
@@ -42,8 +36,6 @@ jobs:
             latest=true
           tags: |
             type=schedule,pattern={{date 'YYYYMMDD'}}
-            type=ref,event=tag
-            type=ref,event=pr
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
