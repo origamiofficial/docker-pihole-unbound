@@ -45,7 +45,7 @@ RUN set -e -x && \
       -DOPENSSL_NO_HEARTBEATS \
       -fstack-protector-strong && \
     make depend && \
-    nproc | xargs -I % make -j% && \
+    make -j4 && \
     make install_sw && \
     rm -rf \
         /tmp/* \
