@@ -1,4 +1,4 @@
-# pihole-unbound ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest.svg?style=flat&label=image&logo=docker) [![Daily Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-daily.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-daily.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
+# pihole-unbound ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest.svg?style=flat&label=image&logo=docker) [![Weekly Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-weekly.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-weekly.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
 
 [pihole-unbound](https://github.com/origamiofficial/docker-pihole-unbound) is a Docker container to run [Pi-Hole](https://github.com/pi-hole/pi-hole) & [Unbound](https://github.com/NLnetLabs/unbound) on the same container.
 
@@ -33,11 +33,11 @@ docker run -d --name pihole-unbound \
 ### Docker Tags
 The Docker tags supported by this image are:
 
-| Tag | Meaning |
-| :----: | --- |
-| latest | This image is build weekly |
-| date| Same as ```latest``` |
-| daily| This image is build daily |
+| Tag | Meaning | Type |
+| :----: | :----: | ---- |
+| `latest` | This image is build weekly | Stable |
+| `date` | Same as ```latest``` | Stable |
+| `daily` | This image is build daily | Beta |
 
 Note: Date tag images aren't the same as the official ones, they're based on the build date.
 
