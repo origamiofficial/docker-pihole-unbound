@@ -30,7 +30,17 @@ docker run -d --name pihole-unbound \
   rlabinc/pihole-unbound:latest
 ```
 
-Note: This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables). Date tag images aren't the same as the official ones, they're based on the build date.
+### Docker Tags
+The Docker tags supported by this image are:
+
+| Tag | Meaning |
+| :----: | --- |
+| latest | This image is build weekly |
+| weekly | Same as ```latest``` |
+| date| Same as ```latest``` |
+| daily| This image is build daily |
+
+Note: Date tag images aren't the same as the official ones, they're based on the build date.
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
@@ -70,6 +80,8 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. |
 | `-e PIHOLE_DNS_=127.0.0.1#5335` | Pi-hole upstream DNS server to use. DO NOT CHANGE THIS |
 | `--restart=always` | To make sure "It's Always DNS" not happend. |
+
+This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
 
 ## Pihole Github Repository
 https://github.com/pi-hole/docker-pi-hole
