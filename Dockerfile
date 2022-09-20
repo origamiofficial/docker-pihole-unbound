@@ -1,39 +1,11 @@
-FROM pihole/pihole:latest
+FROM pihole/pihole:latest as openssl
 
-# set version label
-LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole"
-LABEL unbound_github_repository="https://github.com/NLnetLabs/unbound"
-LABEL docker_pihole_unbound_github_repository="https://github.com/origamiofficial/docker-pihole-unbound"
-LABEL maintainer="OrigamiOfficial"
-
-# environment settings
 WORKDIR /tmp/src
-ENV PATH /opt/unbound/sbin:"$PATH"
-ENV PIHOLE_DNS_ 127.0.0.1#5335
-ARG TARGETPLATFORM
 
-# update & install dependencies
 RUN set -e -x && \
-    build_deps="build-essential dirmngr gnupg libidn2-0-dev libssl-dev gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make bison" && \
+    build_deps="build-essential ca-certificates curl dirmngr gnupg libidn2-0-dev libssl-dev" && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
-      $build_deps \
-      git \
-      ca-certificates \
-      bsdmainutils \
-      ldnsutils \
-      libevent-2.1-7 \
-      libexpat1 \
-      libprotobuf-c-dev \
-      protobuf-c-compiler \
-      libnghttp2-14 \
-      libprotobuf-c1
-
-# platform specfic command
-RUN if [ "$TARGETPLATFORM" = "linux/386" ] ; \
-    then set -e -x && apt-get install -y --no-install-recommends gcc-multilib g++-multilib libx11-dev:i386 libx11-dev ; fi
-
-# install openssl
-RUN set -e -x && \
+      $build_deps && \
     git clone https://github.com/openssl/openssl.git && \
     cd openssl && \
     ./config \
@@ -45,17 +17,33 @@ RUN set -e -x && \
       -DOPENSSL_NO_HEARTBEATS \
       -fstack-protector-strong && \
     make depend && \
-    make -j4 && \
+    nproc | xargs -I % make -j% && \
     make install_sw && \
+    apt-get purge -y --auto-remove \
+      $build_deps && \
     rm -rf \
         /tmp/* \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-# install unbound
-RUN set -e -x && \
-    mkdir /tmp/workdir && \
-    cd /tmp/workdir && \
+
+FROM pihole/pihole:latest as unbound
+
+WORKDIR /tmp/src
+
+COPY --from=openssl /opt/openssl /opt/openssl
+
+RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make" && \
+    set -x && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
+      $build_deps \
+      bsdmainutils \
+      ca-certificates \
+      ldnsutils \
+      libevent-2.1-7 \
+      libexpat1 \
+      libprotobuf-c-dev \
+      protobuf-c-compiler && \
     git clone https://github.com/NLnetLabs/unbound.git && \
     cd unbound && \
     groupadd _unbound && \
@@ -82,12 +70,50 @@ RUN set -e -x && \
         /tmp/* \
         /var/tmp/* \
         /var/lib/apt/lists/*
-	
+
+
+FROM pihole/pihole:latest
+
+WORKDIR /tmp/src
+
+COPY --from=unbound /opt /opt
+
+RUN set -x && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
+      bsdmainutils \
+      ca-certificates \
+      ldnsutils \
+      libevent-2.1-7 \
+      libnghttp2-14 \
+      libexpat1 \
+      libprotobuf-c1 && \
+    groupadd _unbound && \
+    useradd -g _unbound -s /dev/null -d /etc _unbound && \
+    apt-get purge -y --auto-remove \
+      $build_deps && \
+    rm -rf \
+        /opt/unbound/share/man \
+        /tmp/* \
+        /var/tmp/* \
+        /var/lib/apt/lists/*
+
+WORKDIR /opt/unbound/
+
 # copy extra files
 COPY lighttpd-external.conf /etc/lighttpd/external.conf
 COPY 99-edns.conf /etc/dnsmasq.d/99-edns.conf
 COPY data/ /
 RUN chmod +x /unbound.sh
+
+# set version label
+LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole" \
+      unbound_github_repository="https://github.com/NLnetLabs/unbound" \
+      docker_pihole_unbound_github_repository="https://github.com/origamiofficial/docker-pihole-unbound" \
+      maintainer="OrigamiOfficial"
+
+# environment settings
+ENV PIHOLE_DNS_ 127.0.0.1#5335
+ENV PATH /opt/unbound/sbin:"$PATH"
 
 # target run
 CMD ["/unbound.sh"]
