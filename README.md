@@ -25,7 +25,6 @@ docker run -d --name pihole-unbound \
   -p 53:53/tcp -p 53:53/udp \
   -p 80:80/tcp `#Pi-hole web interface port` \
   -e WEBPASSWORD='qwerty123' `#better to use single quotes` \
-  -e PIHOLE_DNS_=127.0.0.1#5335 `#do not change this` \
   --restart=always \
   rlabinc/pihole-unbound:latest
 ```
@@ -77,7 +76,6 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. |
 | `-p 80:80/tcp` | Specify Pi-hole web interface port. |
 | `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. |
-| `-e PIHOLE_DNS_=127.0.0.1#5335` | Pi-hole upstream DNS server to use. DO NOT CHANGE THIS |
 | `--restart=always` | To make sure "It's Always DNS" not happend. |
 
 This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
@@ -93,7 +91,7 @@ https://github.com/origamiofficial/docker-pihole-unbound
 
 ## Acknowledgements
 Credit for Pi-hole goes to [@pi-hole](https://github.com/pi-hole).
-Credit for  Unbound goes to [@NLnetLabs](https://github.com/NLnetLabs).
+Credit for Unbound goes to [@NLnetLabs](https://github.com/NLnetLabs).
 Credit for Unbound Docker goes to [@MatthewVance](https://github.com/MatthewVance).
 Credit for Pi-hole Unbound Docker configs goes to [@chriscrowe](https://github.com/chriscrowe).
 
