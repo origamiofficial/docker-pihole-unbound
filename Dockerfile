@@ -106,10 +106,7 @@ COPY data/ /
 RUN chmod +x /unbound.sh
 
 # set version label
-LABEL pihole_github_repository="https://github.com/pi-hole/pi-hole" \
-      unbound_github_repository="https://github.com/NLnetLabs/unbound" \
-      docker_pihole_unbound_github_repository="https://github.com/origamiofficial/docker-pihole-unbound" \
-      maintainer="OrigamiOfficial"
+LABEL maintainer="OrigamiOfficial"
 
 # environment settings
 ENV PIHOLE_DNS_ 127.0.0.1#5335
