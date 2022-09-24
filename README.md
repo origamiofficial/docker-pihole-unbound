@@ -1,4 +1,4 @@
-# pihole-unbound ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest.svg?style=flat&label=image&logo=docker) [![Weekly Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-weekly.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-weekly.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
+# pihole-unbound ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest.svg?style=flat&label=image&logo=docker) [![Latest Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
 
 [pihole-unbound](https://github.com/origamiofficial/docker-pihole-unbound) is a Docker container to run [Pi-Hole](https://github.com/pi-hole/pi-hole) & [Unbound](https://github.com/NLnetLabs/unbound) on the same container.
 
@@ -36,7 +36,7 @@ The Docker tags supported by this image are:
 | :----: | :----: | ---- |
 | `latest` | This image is build weekly | Stable |
 | `date` | Same as `latest` | Stable |
-| `daily` | This image is build daily | Beta |
+| `dev` | This image is build daily | Beta |
 
 Note: Date tag images aren't the same as the official ones, they're based on the build date.
 
@@ -77,6 +77,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-p 80:80/tcp` | Specify Pi-hole web interface port. |
 | `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. |
 | `--restart=always` | To make sure "It's Always DNS" not happend. |
+| `-v /opt/unbound/etc/unbound` | Your customized Unbound configuration `unbound.conf` location. |
 
 This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
 
