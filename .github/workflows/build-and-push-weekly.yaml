@@ -48,11 +48,12 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v3
         with:
+          context: ./latest/
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-cache/weekly
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -
         # Temp fix
@@ -60,5 +61,5 @@ jobs:
         # https://github.com/moby/buildkit/issues/1896
         name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-cache/weekly
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache/weekly
