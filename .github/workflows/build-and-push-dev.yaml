@@ -1,4 +1,4 @@
-name: Daily Build & Push
+name: Dev Build & Push
 on:
   schedule:
     - cron: '0 3 * * *'
@@ -37,7 +37,7 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=schedule,pattern=daily
+            type=schedule,pattern=dev
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
@@ -53,7 +53,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache/daily
+          cache-from: type=local,src=/tmp/.buildx-cache/dev
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -
         # Temp fix
@@ -61,5 +61,5 @@ jobs:
         # https://github.com/moby/buildkit/issues/1896
         name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache/daily
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache/daily
+          rm -rf /tmp/.buildx-cache/dev
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache/dev
