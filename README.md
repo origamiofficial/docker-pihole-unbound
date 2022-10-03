@@ -93,10 +93,10 @@ https://github.com/origamiofficial/docker-pihole-unbound
 ## Acknowledgements
 The code in this image is heavily influenced by MatthewVance's unbound-docker with the help of chriscrowe's docker-pihole-unbound server Docker image configs,
 However, the upstream projects most certainly also deserve credit for making this all possible.
-- [@pi-hole](https://github.com/pi-hole).
-- [@NLnetLabs](https://github.com/NLnetLabs).
-- [@MatthewVance](https://github.com/MatthewVance).
-- [@chriscrowe](https://github.com/chriscrowe).
+- [pi-hole](https://github.com/pi-hole).
+- [NLnetLabs](https://github.com/NLnetLabs).
+- [MatthewVance](https://github.com/MatthewVance).
+- [chriscrowe](https://github.com/chriscrowe).
 
 ## Warning
 
