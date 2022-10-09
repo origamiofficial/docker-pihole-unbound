@@ -46,6 +46,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/cache:pu.dev.buildcache
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/cache:pihole-unbound.dev
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/cache:pu.dev.buildcache,mode=max
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/cache:pihole-unbound.dev,mode=max
