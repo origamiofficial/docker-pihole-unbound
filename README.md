@@ -101,3 +101,5 @@ However, the upstream projects most certainly also deserve credit for making thi
 ## Warning
 
 I'm not responsible if your internet goes down using this Docker container. Use at your own risk.
+
+[![HitCount](https://hits.dwyl.com/origamiofficial/docker-pihole-unbound.svg?style=flat&show=unique)](http://hits.dwyl.com/origamiofficial/docker-pihole-unbound)
