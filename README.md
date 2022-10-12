@@ -34,7 +34,7 @@ The Docker tags supported by this image are:
 
 | Tag | Meaning | Type |
 | :----: | :----: | ---- |
-| `latest` | This image is build weekly | Stable |
+| `latest` | This image is build every three days | Stable |
 | `date` | Same as `latest` | Stable |
 | `dev` | This image is build daily | Beta |
 

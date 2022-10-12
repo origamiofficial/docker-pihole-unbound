@@ -1,7 +1,7 @@
 name: Latest Build & Push
 on:
   schedule:
-    - cron: '0 7 * * 0'
+    - cron: '0 7 1-30/3 * *'
 
 jobs:
   build-and-publish:
