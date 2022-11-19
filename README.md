@@ -7,15 +7,17 @@
 
 We utilise the docker buildx for multi-platform awareness. More information is available from docker [here](https://docs.docker.com/buildx/working-with-buildx/).
 
-Simply pulling `rlabinc/pihole-unbound:latest` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
+Simply pulling `rlabinc/pihole-unbound:latest` should retrieve the correct image for your arch, but you can also pull specific arch images via `--platform`.
 
 The architectures supported by this image are:
 
-| Architecture | Available | Tag |
-| :----: | :----: | ---- |
-| x86-64 | ✅ | amd64-\<version tag\> |
-| arm64 | ✅ | arm64-\<version tag\> |
-| armhf| ✅ | arm32v7-\<version tag\> |
+| Architecture | Available | Platform |
+| :----: | :----: | :----: |
+| x86-64 | ✅ | linux/amd64 |
+| arm64 | ✅ | linux/arm64 |
+| armhf | ✅ | linux/arm/v7 |
+| armv6 | ✅ | linux/arm/v6 |
+| i386 | ❎ | [Compile Failed](https://github.com/origamiofficial/docker-pihole-unbound/issues/1) \<help wanted\> |
 
 ## Usage
 Here are the commands you'll need:
