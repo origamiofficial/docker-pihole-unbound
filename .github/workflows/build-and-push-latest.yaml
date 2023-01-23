@@ -1,4 +1,4 @@
-name: [Latest] Build & Push
+name: Latest Build & Push
 on:
   schedule:
     - cron: '0 7 * * *'
