@@ -56,7 +56,7 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,pattern=dev
+            type=raw,value=dev
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
