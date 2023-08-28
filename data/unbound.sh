@@ -350,7 +350,7 @@ server:
     # FORWARD ZONE
     ###########################################################################
 
-    include: /opt/unbound/etc/unbound/forward-records.conf
+    #include: /opt/unbound/etc/unbound/forward-records.conf
 
 
 remote-control:
