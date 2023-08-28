@@ -39,7 +39,7 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,value=${IMAGE_TAG}
+            type=raw,value=${{ inputs.imageTag }}
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
@@ -54,11 +54,11 @@ jobs:
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: BASE_IMG_TAG=${IMAGE_TAG}
+          build-args: BASE_IMG_TAG=${{ inputs.imageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound:buildcache.${IMAGE_TAG}
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound:buildcache.${{ inputs.imageTag }}
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound:buildcache.${IMAGE_TAG},mode=max
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound:buildcache.${{ inputs.imageTag }},mode=max
