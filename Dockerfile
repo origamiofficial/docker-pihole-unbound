@@ -1,4 +1,7 @@
-FROM pihole/pihole:dev as openssl
+# Define an ARG for the base image tag
+ARG BASE_IMG_TAG=none
+
+FROM pihole/pihole:${BASE_IMG_TAG} as openssl
 
 WORKDIR /tmp/src
 
@@ -27,7 +30,7 @@ RUN set -e -x && \
         /var/lib/apt/lists/*
 
 
-FROM pihole/pihole:dev as unbound
+FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
 WORKDIR /tmp/src
 
@@ -72,7 +75,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /var/lib/apt/lists/*
 
 
-FROM pihole/pihole:dev
+FROM pihole/pihole:${BASE_IMG_TAG}
 
 WORKDIR /tmp/src
 
