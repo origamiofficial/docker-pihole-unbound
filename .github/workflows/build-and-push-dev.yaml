@@ -1,5 +1,6 @@
 name: Dev Build & Push
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'
 
@@ -20,7 +21,7 @@ jobs:
         id: base_update_check
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
-          PREVIOUS_DIGEST=$(cat ./dev/Base_Digest)
+          PREVIOUS_DIGEST=$(cat ./Dev_Base_Digest)
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
             echo "Base image has not been updated. Exiting..."
             echo "build_image=false" >> $GITHUB_OUTPUT
@@ -36,7 +37,6 @@ jobs:
     steps:
       -
         name: Checkout
-        if: github.event_name == 'schedule'
         uses: actions/checkout@v3
         with:
           ref: main
@@ -67,8 +67,9 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./dev/
+          context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=dev
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -82,7 +83,7 @@ jobs:
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./dev/Base_Digest
+          echo $BASE_IMAGE_DIGEST > ./Dev_Base_Digest
       -
         name: Push changes to repository
         env:
@@ -94,6 +95,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
-          git add ./dev/Base_Digest
+          git add ./Dev_Base_Digest
           git commit -m "Base Digest Updated"
           git push
