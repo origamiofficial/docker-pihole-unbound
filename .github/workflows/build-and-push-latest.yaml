@@ -58,7 +58,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
       -
         name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
