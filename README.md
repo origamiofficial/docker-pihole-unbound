@@ -35,13 +35,13 @@ docker run -d --name pihole-unbound \
 The Docker tags supported by this image are:
 
 | Tag | Meaning | Type |
-| :----: | :----: | ---- |
+| :----: | :----: | :----: |
 | `latest` | This image is build every three days | Stable |
 | `date` | Same as `latest` | Stable |
 | `dev` | This image is build daily | Beta |
 | `development-v6` | This image is build daily | Beta |
 
-Note: Date tag images aren't the same as the official ones, they're based on the build date. For more info regarding development-v6 visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
+Note: Date tag images aren't the same as the official ones, they're based on the build date. The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
@@ -73,14 +73,14 @@ Users of older Ubuntu releases (circa 17.04) will need to disable dnsmasq.
 
 Container images are configured using parameters passed at runtime (such as those above).
 
-| Parameter | Function |
-| :----: | --- |
-| `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
-| `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. |
-| `-p 80:80/tcp` | Specify Pi-hole web interface port. |
-| `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. |
-| `--restart=always` | To make sure "It's Always DNS" not happend. |
-| `-v /opt/unbound/etc/unbound` | Your customized Unbound configuration `unbound.conf` location. |
+| Parameter | Function | `development-v6` Only |
+| :----: | :----: | :----: |
+| `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. | `-e TZ=Europe/London` |
+| `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. | `-p 53:53/tcp -p 53:53/udp` |
+| `-p 80:80/tcp` | Specify Pi-hole web interface port. | `-p 80:80/tcp` |
+| `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. If not set Run docker logs pihole | grep random to find your random pass. | `-e FTLCONF_webserver_api_password='qwerty123'` |
+| `--restart=always` | To make sure "It's Always DNS" does not happen. | `--restart=always` |
+| `-v /opt/unbound/etc/unbound` | Your customized Unbound configuration `unbound.conf` location. | `-v /opt/unbound/etc/unbound` |
 
 This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
 
