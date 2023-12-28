@@ -34,12 +34,12 @@ docker run -d --name pihole-unbound \
 ### Docker Tags
 The Docker tags supported by this image are:
 
-| Tag | Meaning | Type |
-| :----: | :----: | :----: |
-| `latest` | This image is build every three days | Stable |
-| `date` | Same as `latest` | Stable |
-| `dev` | This image is build daily | Beta |
-| `development-v6` | This image is build daily | Beta |
+| Tag | Type |
+| :----: | :----: |
+| `latest` | Stable |
+| `date` | Stable |
+| `dev` | Beta |
+| `development-v6` | Beta |
 
 Note: Date tag images aren't the same as the official ones, they're based on the build date. The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
