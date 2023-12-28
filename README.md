@@ -17,7 +17,6 @@ The architectures supported by this image are:
 | arm64 | ✅ | linux/arm64 |
 | armhf | ✅ | linux/arm/v7 |
 | armv6 | ✅ | linux/arm/v6 |
-| i386 | ❎ | [Compile Failed](https://github.com/origamiofficial/docker-pihole-unbound/issues/1) \<help wanted\> |
 
 ## Usage
 Here are the commands you'll need:
@@ -42,7 +41,7 @@ The Docker tags supported by this image are:
 | `dev` | This image is build daily | Beta |
 | `development-v6` | This image is build daily | Beta |
 
-Note: Date tag images aren't the same as the official ones, they're based on the build date.
+Note: Date tag images aren't the same as the official ones, they're based on the build date. For more info regarding development-v6 visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
