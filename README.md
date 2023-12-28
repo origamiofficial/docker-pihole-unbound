@@ -40,6 +40,7 @@ The Docker tags supported by this image are:
 | `latest` | This image is build every three days | Stable |
 | `date` | Same as `latest` | Stable |
 | `dev` | This image is build daily | Beta |
+| `development-v6` | This image is build daily | Beta |
 
 Note: Date tag images aren't the same as the official ones, they're based on the build date.
 
