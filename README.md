@@ -78,7 +78,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. | `-e TZ=Europe/London` |
 | `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. | `-p 53:53/tcp -p 53:53/udp` |
 | `-p 80:80/tcp` | Specify Pi-hole web interface port. | `-p 80:80/tcp` |
-| `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. If not set Run docker logs pihole | grep random to find your random pass. | `-e FTLCONF_webserver_api_password='qwerty123'` |
+| `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. | `-e FTLCONF_webserver_api_password='qwerty123'` |
 | `--restart=always` | To make sure "It's Always DNS" does not happen. | `--restart=always` |
 | `-v /opt/unbound/etc/unbound` | Your customized Unbound configuration `unbound.conf` location. | `-v /opt/unbound/etc/unbound` |
 
