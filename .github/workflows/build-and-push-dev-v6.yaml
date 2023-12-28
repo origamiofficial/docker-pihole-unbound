@@ -1,0 +1,100 @@
+name: Dev-v6 Build & Push
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 11 * * *'
+
+jobs:
+  job01:
+    name: Base update check
+    runs-on: ubuntu-latest
+    outputs:
+      build_new_image: ${{ steps.base_update_check.outputs.build_image }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      -
+        name: Base image update check
+        id: base_update_check
+        run: |
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
+          PREVIOUS_DIGEST=$(cat ./development-v6/Dev-v6_Base_Digest)
+          if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
+            echo "Base image has not been updated. Exiting..."
+            echo "build_image=false" >> $GITHUB_OUTPUT
+          else
+            echo "Base image has been updated. Continuing with the build..."
+            echo "build_image=true" >> $GITHUB_OUTPUT
+          fi
+  job02:
+    name: Build and publish
+    needs: [job01]
+    if: needs.job01.outputs.build_new_image == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=development-v6
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./development-v6/
+          platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=development-v6
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.development-v6
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.development-v6,mode=max
+            
+      -
+        name: Update digest to file
+        run: |
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
+          echo "New Digest: $BASE_IMAGE_DIGEST"
+          echo $BASE_IMAGE_DIGEST > ./development-v6/Dev-v6_Base_Digest
+      -
+        name: Push changes to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ $(git status) == *"nothing to commit, working tree clean"* ]]; then
+          exit 0
+          fi
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
+          git add ./development-v6/Dev-v6_Base_Digest
+          git commit -m "Base Digest Updated"
+          git push
