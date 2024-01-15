@@ -124,3 +124,23 @@ jobs:
           tag: ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}
           prerelease: true
           overwrite: true
+      -
+        name: Update digest to file
+        run: |
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
+          echo "New Digest: $BASE_IMAGE_DIGEST"
+          echo $BASE_IMAGE_DIGEST > ./digest_base_${{ inputs.BaseImageTag }}
+      -
+        name: Push changes to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ $(git status) == *"nothing to commit, working tree clean"* ]]; then
+          exit 0
+          fi
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
+          git add ./digest_base_${{ inputs.BaseImageTag }}
+          git commit -m "Base Digest Updated"
+          git push
