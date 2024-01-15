@@ -272,7 +272,7 @@ server:
     # servers and checks if the reply still has the correct casing.
     # This feature is an experimental implementation of draft dns-0x20.
     # Experimental option.
-    use-caps-for-id: yes
+    use-caps-for-id: no
 
     # Help protect users that rely on this validator for authentication from
     # potentially bad data in the additional section. Instruct the validator to
