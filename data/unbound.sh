@@ -108,13 +108,13 @@ server:
     # Do not print one line per reply to the log
     log-replies: no
 
-    # Do not print log lines that say why queries return SERVFAIL to clients
-    log-servfail: no
+    # Print log lines that say why queries return SERVFAIL to clients
+    log-servfail: yes
 
     # If you want to log to a file, use:
-    # logfile: /opt/unbound/etc/unbound/unbound.log
+    logfile: /opt/unbound/etc/unbound/unbound.log
     # Set log location (using /dev/null further limits logging)
-    logfile: /dev/null
+    # logfile: /dev/null
 
     # Set logging level
     # Level 0: No verbosity, only errors.
@@ -123,7 +123,7 @@ server:
     # Level 3: Gives query level information, output per query.
     # Level 4:  Gives algorithm level information.
     # Level 5: Logs client identification for cache misses.
-    verbosity: 0
+    verbosity: 1
 
     ###########################################################################
     # PRIVACY SETTINGS
@@ -400,5 +400,8 @@ mkdir -p -m 700 /opt/unbound/etc/unbound/var && \
 chown _unbound:_unbound /opt/unbound/etc/unbound/var && \
 /opt/unbound/sbin/unbound-anchor -a /opt/unbound/etc/unbound/var/root.key
 curl https://www.internic.net/domain/named.root -q -o /usr/share/dns/root.hints
+
+touch /opt/unbound/etc/unbound/unbound.log && \
+chown _unbound:_unbound /opt/unbound/etc/unbound/unbound.log
 
 exec /opt/unbound/sbin/unbound -d -c /opt/unbound/etc/unbound/unbound.conf
