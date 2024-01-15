@@ -174,6 +174,10 @@ server:
     # probes.
     auto-trust-anchor-file: "var/root.key"
 
+	# Use this only when you downloaded the list of primary root servers!
+    # If you use the default dns-root-data package, unbound will find it automatically
+    root-hints: "/opt/unbound/etc/unbound/var/root.hints"
+
     # Enable chroot (i.e, change apparent root directory for the current
     # running process and its children)
     chroot: "/opt/unbound/etc/unbound"
@@ -398,8 +402,8 @@ cp -a /dev/random /dev/urandom /dev/null /opt/unbound/etc/unbound/dev/
 
 mkdir -p -m 700 /opt/unbound/etc/unbound/var && \
 chown _unbound:_unbound /opt/unbound/etc/unbound/var && \
-/opt/unbound/sbin/unbound-anchor -a /opt/unbound/etc/unbound/var/root.key
-curl https://www.internic.net/domain/named.root -q -o /usr/share/dns/root.hints
+/opt/unbound/sbin/unbound-anchor -a /opt/unbound/etc/unbound/var/root.key && \
+curl https://www.internic.net/domain/named.root -q -o /opt/unbound/etc/unbound/var/root.hints
 
 touch /opt/unbound/etc/unbound/unbound.log && \
 chown _unbound:_unbound /opt/unbound/etc/unbound/unbound.log
