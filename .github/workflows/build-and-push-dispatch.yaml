@@ -5,7 +5,7 @@ on:
       imageTag:
         description: 'Image Tag'
         required: true
-        default: 'dev'
+        default: 'latest'
         type: choice
         options:
         - latest
