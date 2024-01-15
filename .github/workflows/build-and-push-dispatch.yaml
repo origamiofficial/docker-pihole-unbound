@@ -8,8 +8,9 @@ on:
         default: 'dev'
         type: choice
         options:
-        - dev
         - latest
+        - dev
+        - development-v6
 
 jobs:
   job01:
