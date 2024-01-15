@@ -21,7 +21,7 @@ jobs:
         id: base_update_check
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
-          PREVIOUS_DIGEST=$(cat ./development-v6/Dev-v6_Base_Digest)
+          PREVIOUS_DIGEST=$(cat ./digest_base_development-v6)
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
             echo "Base image has not been updated. Exiting..."
             echo "build_image=false" >> $GITHUB_OUTPUT
@@ -67,7 +67,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./development-v6/
+          context: ./
+          file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: BASE_IMG_TAG=development-v6
           push: true
@@ -89,7 +90,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./development-v6/Dev-v6_Base_Digest
+          file: ./digest_base_development-v6
           release_name: development-v6-${{ steps.version_code_check.outputs.VERSION_CODE }}
           tag: development-v6-${{ steps.version_code_check.outputs.VERSION_CODE }}
           prerelease: true
@@ -99,7 +100,7 @@ jobs:
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./development-v6/Dev-v6_Base_Digest
+          echo $BASE_IMAGE_DIGEST > ./digest_base_development-v6
       -
         name: Push changes to repository
         env:
@@ -111,6 +112,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
-          git add ./development-v6/Dev-v6_Base_Digest
+          git add ./digest_base_development-v6
           git commit -m "Base Digest Updated"
           git push

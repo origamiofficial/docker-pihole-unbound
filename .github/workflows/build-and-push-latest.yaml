@@ -20,7 +20,7 @@ jobs:
         id: base_update_check
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"digest":"\K[^"]+' | tail -1)
-          PREVIOUS_DIGEST=$(cat ./Latest_Base_Digest)
+          PREVIOUS_DIGEST=$(cat ./digest_base_latest)
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
             echo "Base image has not been updated. Exiting..."
             echo "build_image=false" >> $GITHUB_OUTPUT
@@ -91,7 +91,7 @@ jobs:
             ## What's Changed (Docker Image v${{ steps.version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./Latest_Base_Digest
+          file: ./digest_base_latest
           release_name: ${{ steps.version_code_check.outputs.VERSION_CODE }}
           tag: ${{ steps.version_code_check.outputs.VERSION_CODE }}
           make_latest: true
@@ -101,7 +101,7 @@ jobs:
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./Latest_Base_Digest
+          echo $BASE_IMAGE_DIGEST > ./digest_base_latest
       -
         name: Push changes to repository
         env:
@@ -113,6 +113,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
-          git add ./Latest_Base_Digest
+          git add ./digest_base_latest
           git commit -m "Base Digest Updated"
           git push
