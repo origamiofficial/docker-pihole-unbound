@@ -108,7 +108,7 @@ jobs:
             ## What's Changed (Docker Image v${{ steps.version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./latest_base_digest
+          file: ./digest_base_latest
           release_name: ${{ steps.version_code_check.outputs.VERSION_CODE }}
           tag: ${{ steps.version_code_check.outputs.VERSION_CODE }}
           make_latest: true
