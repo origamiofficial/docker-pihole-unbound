@@ -76,7 +76,26 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.latest
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.latest,mode=max
-            
+      -
+        name: Version code
+        id: version_code_check
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Create release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          body: |
+            ## What's Changed (Docker Image v${{ steps.version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check.outputs.VERSION_CODE }})
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./Latest_Base_Digest
+          release_name: ${{ steps.version_code_check.outputs.VERSION_CODE }}
+          tag: ${{ steps.version_code_check.outputs.VERSION_CODE }}
+          make_latest: true
+          overwrite: true
       -
         name: Update digest to file
         run: |

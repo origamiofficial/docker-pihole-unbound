@@ -62,3 +62,63 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.imageTag }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.imageTag }},mode=max
+      -
+        name: Version code [latest]
+        if: inputs.imageTag == 'latest'
+        id: version_code_check_latest
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Create release [latest]
+        if: inputs.imageTag == 'latest'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          body: |
+            ## What's Changed (Docker Image v${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./Latest_Base_Digest
+          release_name: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
+          tag: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
+          make_latest: true
+          overwrite: true
+      -
+        name: Version code [dev]
+        if: inputs.imageTag == 'dev'
+        id: version_code_check_dev
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Create release [dev]
+        if: inputs.imageTag == 'dev'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./Dev_Base_Digest
+          release_name: dev-${{ steps.version_code_check_dev.outputs.VERSION_CODE }}
+          tag: dev-${{ steps.version_code_check_dev.outputs.VERSION_CODE }}
+          prerelease: true
+          overwrite: true
+      -
+        name: Version code [development-v6]
+        if: inputs.imageTag == 'development-v6'
+        id: version_code_check_dev_v6
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Create release [development-v6]
+        if: inputs.imageTag == 'development-v6'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./development-v6/Dev-v6_Base_Digest
+          release_name: development-v6-${{ steps.version_code_check_dev_v6.outputs.VERSION_CODE }}
+          tag: development-v6-${{ steps.version_code_check_dev_v6.outputs.VERSION_CODE }}
+          prerelease: true
+          overwrite: true
