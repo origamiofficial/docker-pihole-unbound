@@ -13,10 +13,10 @@ The architectures supported by this image are:
 
 | Architecture | Available | Platform |
 | :----: | :----: | :----: |
-| x86-64 | ✅ | linux/amd64 |
+| amd64 | ✅ | linux/amd64 |
 | arm64 | ✅ | linux/arm64 |
 | armhf | ✅ | linux/arm/v7 |
-| armv6 | ✅ | linux/arm/v6 |
+| armel | ✅ | linux/arm/v6 |
 
 ## Usage
 Here are the commands you'll need:
