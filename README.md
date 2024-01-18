@@ -3,6 +3,8 @@
 
 [pihole-unbound](https://github.com/origamiofficial/docker-pihole-unbound) is a Docker container to run [Pi-Hole](https://github.com/pi-hole/pi-hole) & [Unbound](https://github.com/NLnetLabs/unbound) on the same container.
 
+![alt text](https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/banner.png)
+
 ## Supported Architectures
 
 We utilise the docker buildx for multi-platform awareness. More information is available from docker [here](https://docs.docker.com/buildx/working-with-buildx/).
