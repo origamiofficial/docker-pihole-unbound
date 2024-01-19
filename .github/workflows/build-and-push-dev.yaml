@@ -19,8 +19,20 @@ jobs:
         name: Base image update check
         id: base_update_check
         run: |
+          function validate_digest() {
+            local digest="$1"
+            if [[ ! "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
+              echo "Error invalid digest format: $digest"
+              exit 0
+            fi
+          }
+          
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
+          validate_digest "$BASE_IMAGE_DIGEST"
+          
           PREVIOUS_DIGEST=$(cat ./digest_base_dev)
+          validate_digest "$PREVIOUS_DIGEST"
+          
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
             echo "Base image has not been updated. Exiting..."
             echo "build_image=false" >> $GITHUB_OUTPUT
