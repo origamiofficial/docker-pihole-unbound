@@ -19,7 +19,7 @@ Enter in line below: -->
 This is a: **FILL ME IN**  
 
 
-## Details
+## Details with Docker log
 <!-- Provide a more detailed introduction to the issue or feature, try not to duplicate info from lower sections by reviewing the entire template first -->
 
 ## Related Issues
