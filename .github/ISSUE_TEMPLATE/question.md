@@ -15,7 +15,7 @@ assignees: ''
 ## Details
 <!-- Provide a more detailed question, try not to duplicate info from lower sections by reviewing the entire template first -->
 
-## Related Issues
+## Related Questions
 - [ ] I have searched this repository/Pi-hole official repository/Pi-hole forums for existing issues, questions and pull requests that look similar 
 <!-- Add links below! -->
 
