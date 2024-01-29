@@ -13,7 +13,6 @@ assignees: ''
 <!-- IMPORTANT Complete the entire template please, the info gathered here is usually needed to debug issues anyway so it saves time in the long run. Incomplete/stock template issues may be closed -->
 
 <!-- pick ONE: Bug, 
-               Feature Request, 
                Run Issue (running Pi-hole container failing), 
                Build Issue (Building image failing) 
 Enter in line below: -->
@@ -24,10 +23,9 @@ This is a: **FILL ME IN**
 <!-- Provide a more detailed introduction to the issue or feature, try not to duplicate info from lower sections by reviewing the entire template first -->
 
 ## Related Issues
-- [ ] I have searched this repository/Pi-hole forums for existing issues and pull requests that look similar 
+- [ ] I have searched this repository/Pi-hole official repository/Pi-hole forums for existing issues and pull requests that look similar 
 <!-- Add links below! -->
 
-<!------- FEATURE REQUESTS CAN STOP FILLING IN TEMPLATE HERE -------->
 <!------- ISSUES SHOULD FILL OUT REMAINDER OF TEMPLATE -------->
 
 ## How to reproduce the issue 
