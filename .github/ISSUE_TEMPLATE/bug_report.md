@@ -44,6 +44,9 @@ This is a: **FILL ME IN**
 3. any additional info to help reproduce
 
 
+## Upload the unbound log file
+<!-- IMPORTANT! unbound log file is located at "/opt/unbound/etc/unbound/unbound.log" inside the container. -->
+
 ## These common fixes didn't work for my issue
 <!-- IMPORTANT! Help me help you! Ordered with most common fixes first. -->
 - [ ] I have tried removing/destroying my container, and re-creating a new container
