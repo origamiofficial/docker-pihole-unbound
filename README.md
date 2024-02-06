@@ -1,5 +1,5 @@
 # pihole-unbound 
-![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest?style=flat&logo=docker&label=pihole-unbound) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pihole/pihole/latest?style=flat&logo=docker&label=pihole-official) [![Latest Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social)
+![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest?style=flat&logo=docker&label=pihole-unbound) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pihole/pihole/latest?style=flat&logo=docker&label=pihole-official) [![Latest Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social) ![Telegram Support](https://img.shields.io/endpoint?label=Support&style=flat&url=https%3A%2F%2Fmogyo.ro%2Fquart-apis%2Ftgmembercount%3Fchat_id%3Dpihole_unbound)
 
 [pihole-unbound](https://github.com/origamiofficial/docker-pihole-unbound) is a Docker container to run [Pi-Hole](https://github.com/pi-hole/pi-hole) & [Unbound](https://github.com/NLnetLabs/unbound) on the same container.
 
@@ -85,6 +85,9 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-v /opt/unbound/etc/unbound` | Your customized Unbound configuration `unbound.conf` location. | `-v /opt/unbound/etc/unbound` |
 
 This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
+
+## Telegram Support
+https://t.me/pihole_unbound
 
 ## Pihole Github Repository
 https://github.com/pi-hole/docker-pi-hole
