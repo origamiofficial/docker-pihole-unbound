@@ -32,6 +32,11 @@ RUN set -e -x && \
 
 FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
+ENV NAME=unbound \
+    UNBOUND_VERSION=1.19.0 \
+    UNBOUND_SHA256=a97532468854c61c2de48ca4170de854fd3bc95c8043bb0cfb0fe26605966624 \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.19.0.tar.gz
+
 WORKDIR /tmp/src
 
 COPY --from=openssl /opt/openssl /opt/openssl
@@ -47,7 +52,11 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
       libexpat1 \
       libprotobuf-c-dev \
       protobuf-c-compiler && \
-    git clone https://github.com/NLnetLabs/unbound.git && \
+    curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
+    echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
+    tar xzf unbound.tar.gz && \
+    rm -f unbound.tar.gz && \
+    mv unbound-* unbound && \
     cd unbound && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
