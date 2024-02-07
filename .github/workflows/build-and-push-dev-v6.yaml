@@ -114,16 +114,14 @@ jobs:
           echo "New Digest: $BASE_IMAGE_DIGEST"
           echo $BASE_IMAGE_DIGEST > ./digest_base_development-v6
       -
-        name: Push changes to repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: Commit files
         run: |
-          if [[ $(git status) == *"nothing to commit, working tree clean"* ]]; then
-          exit 0
-          fi
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/origamiofficial/docker-pihole-unbound.git
-          git add ./digest_base_development-v6
-          git commit -m "Base Digest Updated"
-          git push
+          git commit -a -m "Base Digest Updated"
+      -
+        name: Push changes to repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
