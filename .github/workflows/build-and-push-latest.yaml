@@ -55,7 +55,7 @@ jobs:
         name: Version code
         id: version_code_check
         run: |
-          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest | grep "name" | cut -d'"' -f 4 | tail -n 1)
           echo "New Version: $CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
