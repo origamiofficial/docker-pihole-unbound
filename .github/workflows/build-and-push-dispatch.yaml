@@ -93,7 +93,16 @@ jobs:
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
-        name: Version code
+        name: Version code [latest]
+        if: inputs.BaseImageTag == 'latest'
+        id: version_code_check_latest
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest | grep "name" | cut -d'"' -f 4 | tail -n 1)
+          echo "New Version: $CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Version code [dev / development-v6]
+        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
         id: version_code_check
         run: |
           CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
@@ -105,12 +114,12 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           body: |
-            ## What's Changed (Docker Image v${{ steps.version_code_check.outputs.VERSION_CODE }})
-            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check.outputs.VERSION_CODE }})
+            ## What's Changed (Docker Image v${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest_base_latest
-          release_name: ${{ steps.version_code_check.outputs.VERSION_CODE }}
-          tag: ${{ steps.version_code_check.outputs.VERSION_CODE }}
+          release_name: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
+          tag: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
           make_latest: true
           overwrite: true
       -
