@@ -40,6 +40,14 @@ jobs:
             echo "Base image has been updated. Continuing with the build..."
             echo "build_image=true" >> $GITHUB_OUTPUT
           fi
+      -
+        name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound
+          short-description: ${{ github.event.repository.description }}
   job02:
     name: Build and publish
     needs: [job01]
