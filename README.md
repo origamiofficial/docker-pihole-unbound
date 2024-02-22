@@ -1,5 +1,5 @@
 # pihole-unbound 
-![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest?style=flat&logo=docker&label=pihole-unbound) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pihole/pihole/latest?style=flat&logo=docker&label=pihole-official) [![Latest Build & Push](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml/badge.svg)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social) [![Telegram Support](https://img.shields.io/endpoint?label=Support&style=flat&url=https%3A%2F%2Fmogyo.ro%2Fquart-apis%2Ftgmembercount%3Fchat_id%3Dpihole_unbound)](https://t.me/pihole_unbound) ![We Support](https://img.shields.io/badge/we%20stand%20with-%F0%9F%87%B5%F0%9F%87%B8%20palestine-white.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest?style=flat&logo=docker&label=pihole-unbound) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pihole/pihole/latest?style=flat&logo=docker&label=pihole-official) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social) [![Telegram Support](https://img.shields.io/endpoint?label=Support&style=flat&url=https%3A%2F%2Fmogyo.ro%2Fquart-apis%2Ftgmembercount%3Fchat_id%3Dpihole_unbound)](https://t.me/pihole_unbound) ![We Support](https://img.shields.io/badge/we%20stand%20with-%F0%9F%87%B5%F0%9F%87%B8%20palestine-white.svg)
 
 Attention home network enthusiasts! This Docker container offers a streamlined solution for running [Pi-Hole](https://github.com/pi-hole/pi-hole) and [Unbound](https://github.com/NLnetLabs/unbound), enhancing your network's privacy and performance.
 
@@ -86,17 +86,12 @@ Container images are configured using parameters passed at runtime (such as thos
 
 This Docker container supports all Pi-hole official Docker container environment variables available [here](https://github.com/pi-hole/docker-pi-hole/#environment-variables).
 
-## Telegram Support
-https://t.me/pihole_unbound
-
-## Pihole Github Repository
-https://github.com/pi-hole/docker-pi-hole
-
-## Unbound Github Repository
-https://github.com/NLnetLabs/unbound
-
-## Pi-hole Unbound Github Repository
-https://github.com/origamiofficial/docker-pihole-unbound
+## Quick Links
+* [Telegram Support](https://t.me/pihole_unbound)
+* [Pihole Docker Github Repository](https://github.com/pi-hole/docker-pi-hole)
+* [Unbound Github Repository](https://github.com/NLnetLabs/unbound)
+* [Pi-hole Unbound Github Repository](https://github.com/origamiofficial/docker-pihole-unbound)
+* [Pi-hole Unbound Docker Hub](https://hub.docker.com/r/rlabinc/pihole-unbound)
 
 ## Acknowledgements
 The code in this image is heavily influenced by MatthewVance's unbound-docker with the help of chriscrowe's docker-pihole-unbound server Docker image configs,
