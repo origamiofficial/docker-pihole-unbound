@@ -109,7 +109,7 @@ RUN set -x && \
     git clone https://github.com/jacklul/pihole-updatelists.git && \
     cd pihole-updatelists && \
     chmod +x install.sh && \
-    bash /tmp/pihole-updatelists/install.sh docker && \
+    bash install.sh docker && \
     apt-get purge -y --auto-remove \
       $build_deps && \
     rm -rf \
