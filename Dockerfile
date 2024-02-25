@@ -98,22 +98,12 @@ RUN set -x && \
       libevent-2.1-7 \
       libnghttp2-14 \
       libexpat1 \
-      libprotobuf-c1 \
-      wget \
-      php-cli \
-      php-sqlite3 \
-      php-intl \
-      php-curl && \
+      libprotobuf-c1 && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
-    git clone https://github.com/jacklul/pihole-updatelists.git && \
-    cd pihole-updatelists && \
-    chmod +x install.sh && \
-    bash install.sh docker && \
     apt-get purge -y --auto-remove \
       $build_deps && \
     rm -rf \
-        /var/cache/apt/* \
         /opt/unbound/share/man \
         /tmp/* \
         /var/tmp/* \
@@ -133,7 +123,6 @@ LABEL maintainer="OrigamiOfficial"
 # environment settings
 ENV PIHOLE_DNS_ 127.0.0.1#5335
 ENV PATH /opt/unbound/sbin:"$PATH"
-ENV UPDATE_GRAVITY false
 
 # target run
 CMD ["/unbound.sh"]
