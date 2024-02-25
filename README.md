@@ -42,6 +42,7 @@ The Docker tags supported by this image are:
 | `date` | Stable | [![date Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-latest.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) | ✅ |
 | `dev` | Beta | [![dev Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev.yaml) | ✅ |
 | `development-v6` | Beta | [![development-v6 Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev-v6.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev-v6.yaml) | ⏳ |
+| `beta` | Test | ❌ | 🔬 |
 
 Note: The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
