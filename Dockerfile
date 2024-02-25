@@ -98,12 +98,22 @@ RUN set -x && \
       libevent-2.1-7 \
       libnghttp2-14 \
       libexpat1 \
-      libprotobuf-c1 && \
+      libprotobuf-c1 \
+      wget \
+      php-cli \
+      php-sqlite3 \
+      php-intl \
+      php-curl && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
+    git clone https://github.com/jacklul/pihole-updatelists.git && \
+    cd pihole-updatelists && \
+    chmod +x install.sh && \
+    bash /tmp/pihole-updatelists/install.sh docker && \
     apt-get purge -y --auto-remove \
       $build_deps && \
     rm -rf \
+        /var/cache/apt/* \
         /opt/unbound/share/man \
         /tmp/* \
         /var/tmp/* \
