@@ -27,6 +27,7 @@ RUN set -e -x && \
     rm -rf \
         /tmp/* \
         /var/tmp/* \
+        /var/cache/apt/* \
         /var/lib/apt/lists/*
 
 
@@ -81,6 +82,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /opt/unbound/share/man \
         /tmp/* \
         /var/tmp/* \
+        /var/cache/apt/* \
         /var/lib/apt/lists/*
 
 
@@ -107,6 +109,7 @@ RUN set -x && \
         /opt/unbound/share/man \
         /tmp/* \
         /var/tmp/* \
+        /var/cache/apt/* \
         /var/lib/apt/lists/*
 
 WORKDIR /opt/unbound/
