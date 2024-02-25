@@ -130,7 +130,7 @@ LABEL maintainer="OrigamiOfficial"
 # environment settings
 ENV PIHOLE_DNS_ 127.0.0.1#5335
 ENV PATH /opt/unbound/sbin:"$PATH"
-ENV UPDATE_GRAVITY null
+ENV UPDATE_GRAVITY false
 
 # target run
 CMD ["/unbound.sh"]
