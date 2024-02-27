@@ -1,7 +1,7 @@
 # pihole-unbound 
 ![Docker Pulls](https://img.shields.io/docker/pulls/rlabinc/pihole-unbound.svg?style=flat&label=pulls&logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/rlabinc/pihole-unbound/latest?style=flat&logo=docker&label=pihole-unbound) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pihole/pihole/latest?style=flat&logo=docker&label=pihole-official) ![GitHub Repo stars](https://img.shields.io/github/stars/origamiofficial/docker-pihole-unbound?style=social) [![Telegram Support](https://img.shields.io/endpoint?label=Support&style=flat&url=https%3A%2F%2Fmogyo.ro%2Fquart-apis%2Ftgmembercount%3Fchat_id%3Dpihole_unbound)](https://t.me/pihole_unbound) ![We Support](https://img.shields.io/badge/we%20stand%20with-%F0%9F%87%B5%F0%9F%87%B8%20palestine-white.svg)
 
-Attention home network enthusiasts! This Docker container offers a streamlined solution for running [Pi-Hole](https://github.com/pi-hole/pi-hole) and [Unbound](https://github.com/NLnetLabs/unbound), enhancing your network's privacy and performance.
+Level up your network with cutting-edge tech. This Docker container effortlessly combines [Pi-Hole](https://github.com/pi-hole/pi-hole) and [Unbound](https://github.com/NLnetLabs/unbound), giving you the ultimate privacy and performance combo in a single package. It's the future of network management, available today.
 
 ![alt text](https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/banner.png)
 
@@ -78,7 +78,7 @@ Container images are configured using parameters passed at runtime (such as thos
 
 | Parameter | Function | `development-v6` Only |
 | :----: | :----: | :----: |
-| `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. | `-e TZ=Europe/London` |
+| `-e TZ=Europe/London` | Specify a timezone to use ex Europe/London. | `-e TZ=Europe/London` |
 | `-p 53:53/tcp -p 53:53/udp` | Default DNS port to use. | `-p 53:53/tcp -p 53:53/udp` |
 | `-p 80:80/tcp` | Specify Pi-hole web interface port. | `-p 80:80/tcp` |
 | `-e WEBPASSWORD='qwerty123'` | Specify Pi-hole web interface password. It is better to use single quotes. | `-e FTLCONF_webserver_api_password='qwerty123'` |
