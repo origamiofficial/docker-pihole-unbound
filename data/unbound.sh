@@ -397,6 +397,20 @@ remote-control:
 EOT
 fi
 
+# Define an array of config files
+config_files=( "a-records.conf" "srv-records.conf" "forward-records.conf" )
+
+# Iterate through each config files
+for file in "${config_files[@]}"; do
+  # Check if the config file exists
+  if [[ ! -f "/opt/unbound/etc/unbound/$file" ]]; then
+    # Download config file only if it's missing
+    url="https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/data/opt/unbound/etc/unbound/$file"
+    wget -qO "/opt/unbound/etc/unbound/$file" "$url"
+    echo "Downloaded missing config: $file" >&2
+  fi
+done
+
 mkdir -p /opt/unbound/etc/unbound/dev && \
 cp -a /dev/random /dev/urandom /dev/null /opt/unbound/etc/unbound/dev/
 
