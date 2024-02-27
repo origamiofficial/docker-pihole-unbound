@@ -33,13 +33,30 @@ jobs:
         with:
           ref: main
       -
+        name: Version code [latest]
+        if: inputs.BaseImageTag == 'latest'
+        id: version_code_check_latest
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest | grep "name" | cut -d'"' -f 4 | tail -n 1)
+          echo "New Version: $CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Version code [dev / development-v6]
+        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
+        id: version_code_check
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Docker meta
+        name: Docker meta [dev / development-v6]
+        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
         id: meta
         uses: docker/metadata-action@v5
         env:
@@ -52,14 +69,43 @@ jobs:
           tags: |
             type=raw,value=${{ inputs.BuildImageTag }}
       -
+        name: Docker meta [latest]
+        if: inputs.BaseImageTag == 'latest'
+        id: meta_latest
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.DOCKERHUB_NAMESPACE }}/pihole-unbound
+          flavor: |
+            latest=true
+          tags: |
+            type=raw,value=${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
+      -
         name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       -
-        name: Build and push [latest / dev]
-        if: inputs.BaseImageTag == 'latest' || inputs.BaseImageTag == 'dev'
+        name: Build and push [latest]
+        if: inputs.BaseImageTag == 'latest'
+        uses: docker/build-push-action@v5
+        env:
+          IMAGE_TAG: ${{ inputs.BuildImageTag }}
+        with:
+          context: ./
+          platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=${{ inputs.BaseImageTag }}
+          push: true
+          tags: ${{ steps.meta_latest.outputs.tags }}
+          labels: ${{ steps.meta_latest.outputs.labels }}
+          cache-from: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BaseImageTag }}
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
+      -
+        name: Build and push [dev]
+        if: inputs.BaseImageTag == 'dev'
         uses: docker/build-push-action@v5
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -92,22 +138,6 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BaseImageTag }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
-      -
-        name: Version code [latest]
-        if: inputs.BaseImageTag == 'latest'
-        id: version_code_check_latest
-        run: |
-          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest | grep "name" | cut -d'"' -f 4 | tail -n 1)
-          echo "New Version: $CHECK_VERSION_CODE"
-          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
-      -
-        name: Version code [dev / development-v6]
-        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
-        id: version_code_check
-        run: |
-          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
-          echo "New Version: $CHECK_VERSION_CODE"
-          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Create release [Release]
         if: inputs.BaseImageTag == 'latest'
