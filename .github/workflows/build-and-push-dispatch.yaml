@@ -37,8 +37,17 @@ jobs:
         if: inputs.BaseImageTag == 'latest'
         id: version_code_check_latest
         run: |
+          function validate_version() {
+            local version="$1"
+            if [[ ! "$version" =~ ^[0-9]{4}\.[0-9]{2}\.[0-9]{1}$ ]]; then
+              echo "Error invalid version format: $version"
+              exit 1
+            fi
+          }
+          
           CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest | grep "name" | cut -d'"' -f 4 | tail -n 1)
           echo "New Version: $CHECK_VERSION_CODE"
+          validate_version "$CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Version code [dev / development-v6]
