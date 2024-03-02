@@ -24,7 +24,7 @@ jobs:
             local digest="$1"
             if [[ ! "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
               echo "Error invalid digest format: $digest"
-              exit 0
+              exit 1
             fi
           }
           
