@@ -8,7 +8,9 @@ jobs:
     name: Base update check
     runs-on: ubuntu-latest
     outputs:
-      build_new_image: ${{ steps.base_update_check.outputs.build_image }}
+      build_new_image: |
+        ${{ steps.base_update_check.outputs.build_image }}
+        ${{ steps.unbound_update_check.outputs.build_image }}
     steps:
       -
         name: Checkout
@@ -38,6 +40,33 @@ jobs:
             echo "build_image=false" >> $GITHUB_OUTPUT
           else
             echo "Base image has been updated. Continuing with the build..."
+            echo "build_image=true" >> $GITHUB_OUTPUT
+          fi
+      -
+        name: Unbound update check
+        id: unbound_update_check
+        run: |
+          function validate_digest() {
+            local digest="$1"
+            if [[ ! "$digest" =~ ^[a-f0-9]{64}$ ]]; then
+              echo "Error invalid digest format: $digest"
+              exit 1
+            fi
+          }
+          
+          curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
+          
+          LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
+          validate_digest "$LATEST_UNBOUND_DIGEST"
+          
+          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest_unbound)
+          validate_digest "$PREVIOUS_UNBOUND_DIGEST"
+          
+          if [ "$LATEST_UNBOUND_DIGEST" == "$PREVIOUS_UNBOUND_DIGEST" ]; then
+            echo "Unbound has not been updated. Exiting..."
+            echo "build_image=false" >> $GITHUB_OUTPUT
+          else
+            echo "Unbound has been updated. Continuing with the build..."
             echo "build_image=true" >> $GITHUB_OUTPUT
           fi
       -
@@ -129,14 +158,18 @@ jobs:
         name: Update digest to file
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/latest | grep -oP '"digest":"\K[^"]+' | tail -1)
-          echo "New Digest: $BASE_IMAGE_DIGEST"
+          echo "New Base Digest: $BASE_IMAGE_DIGEST"
           echo $BASE_IMAGE_DIGEST > ./digest_base_latest
+          curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
+          LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
+          echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
+          echo $LATEST_UNBOUND_DIGEST > ./digest_unbound
       -
         name: Commit files
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit -a -m "Base Digest Updated"
+          git commit -a -m "Digest Value Updated"
       -
         name: Push changes to repository
         uses: ad-m/github-push-action@master
