@@ -176,8 +176,12 @@ jobs:
         name: Update digest to file
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
-          echo "New Digest: $BASE_IMAGE_DIGEST"
+          echo "New Base Digest: $BASE_IMAGE_DIGEST"
           echo $BASE_IMAGE_DIGEST > ./digest_base_${{ inputs.BaseImageTag }}
+          curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
+          LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
+          echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
+          echo $LATEST_UNBOUND_DIGEST > ./digest_unbound
       -
         name: Commit files
         run: |
@@ -186,7 +190,7 @@ jobs:
           fi
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit -a -m "Base Digest Updated"
+          git commit -a -m "Digest Value Updated"
       -
         name: Push changes to repository
         uses: ad-m/github-push-action@master
