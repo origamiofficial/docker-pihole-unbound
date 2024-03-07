@@ -34,9 +34,9 @@ RUN set -e -x && \
 FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
 ENV NAME=unbound \
-    UNBOUND_VERSION=1.19.1 \
-    UNBOUND_SHA256=bc1d576f3dd846a0739adc41ffaa702404c6767d2b6082deb9f2f97cbb24a3a9 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.19.1.tar.gz
+    UNBOUND_VERSION=1.19.2 \
+    UNBOUND_SHA256=cc560d345734226c1b39e71a769797e7fdde2265cbb77ebce542704bba489e55 \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.19.2.tar.gz
 
 WORKDIR /tmp/src
 
