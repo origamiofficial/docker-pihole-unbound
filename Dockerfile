@@ -35,8 +35,7 @@ FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
 ENV NAME=unbound \
     UNBOUND_VERSION=1.19.2 \
-    UNBOUND_SHA256=cc560d345734226c1b39e71a769797e7fdde2265cbb77ebce542704bba489e55 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.19.2.tar.gz
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
 
 WORKDIR /tmp/src
 
@@ -54,7 +53,6 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
       libprotobuf-c-dev \
       protobuf-c-compiler && \
     curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
-    echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
     mv unbound-* unbound && \
