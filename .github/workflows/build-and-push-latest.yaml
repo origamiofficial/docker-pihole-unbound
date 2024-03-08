@@ -8,9 +8,8 @@ jobs:
     name: Base update check
     runs-on: ubuntu-latest
     outputs:
-      build_new_image: |
-        ${{ steps.base_update_check.outputs.build_image }}
-        ${{ steps.unbound_update_check.outputs.build_image }}
+      base_update_available: ${{ steps.base_update_check.outputs.build_image }}
+      unbound_update_available: ${{ steps.unbound_update_check.outputs.build_image }}
     steps:
       -
         name: Checkout
@@ -80,7 +79,7 @@ jobs:
   job02:
     name: Build and publish
     needs: [job01]
-    if: needs.job01.outputs.build_new_image == 'true'
+    if: needs.job01.outputs.base_update_available == 'true' || needs.job01.outputs.unbound_update_available == 'true'
     runs-on: ubuntu-latest
     steps:
       -
