@@ -58,7 +58,7 @@ jobs:
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           validate_digest "$LATEST_UNBOUND_DIGEST"
           
-          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest_unbound)
+          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest_unbound_dev)
           validate_digest "$PREVIOUS_UNBOUND_DIGEST"
           
           if [ "$LATEST_UNBOUND_DIGEST" == "$PREVIOUS_UNBOUND_DIGEST" ]; then
@@ -142,7 +142,7 @@ jobs:
           curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
-          echo $LATEST_UNBOUND_DIGEST > ./digest_unbound
+          echo $LATEST_UNBOUND_DIGEST > ./digest_unbound_dev
       -
         name: Commit files
         run: |
