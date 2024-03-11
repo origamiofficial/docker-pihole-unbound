@@ -155,6 +155,7 @@ jobs:
           body: |
             ## What's Changed (Docker Image v${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
+            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/latest)
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest_base_latest
           release_name: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
