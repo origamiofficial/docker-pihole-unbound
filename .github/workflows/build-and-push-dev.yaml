@@ -31,7 +31,7 @@ jobs:
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
           validate_digest "$BASE_IMAGE_DIGEST"
           
-          PREVIOUS_DIGEST=$(cat ./digest_base_dev)
+          PREVIOUS_DIGEST=$(cat ./digest/digest_base_dev)
           validate_digest "$PREVIOUS_DIGEST"
           
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
@@ -58,7 +58,7 @@ jobs:
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           validate_digest "$LATEST_UNBOUND_DIGEST"
           
-          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest_unbound_dev)
+          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest/digest_unbound_dev)
           validate_digest "$PREVIOUS_UNBOUND_DIGEST"
           
           if [ "$LATEST_UNBOUND_DIGEST" == "$PREVIOUS_UNBOUND_DIGEST" ]; then
@@ -132,7 +132,7 @@ jobs:
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/dev/)
             * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/latest)
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./digest_base_dev
+          file: ./digest/digest_base_dev
           release_name: dev-${{ steps.version_code_check.outputs.VERSION_CODE }}
           tag: dev-${{ steps.version_code_check.outputs.VERSION_CODE }}
           prerelease: true
@@ -142,11 +142,11 @@ jobs:
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./digest_base_dev
+          echo $BASE_IMAGE_DIGEST > ./digest/digest_base_dev
           curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
-          echo $LATEST_UNBOUND_DIGEST > ./digest_unbound_dev
+          echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound_dev
       -
         name: Commit files
         run: |
