@@ -167,6 +167,10 @@ jobs:
         if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
         uses: svenstaro/upload-release-action@v2
         with:
+          body: |
+            ## What's Changed (Docker Image ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/${{ inputs.BaseImageTag }})
+            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/latest)
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest_base_${{ inputs.BaseImageTag }}
           release_name: ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}

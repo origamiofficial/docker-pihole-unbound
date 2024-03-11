@@ -129,6 +129,10 @@ jobs:
         name: Create release
         uses: svenstaro/upload-release-action@v2
         with:
+          body: |
+            ## What's Changed (Docker Image development-v6-${{ steps.version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/development-v6)
+            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/latest)
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest_base_development-v6
           release_name: development-v6-${{ steps.version_code_check.outputs.VERSION_CODE }}
