@@ -183,7 +183,7 @@ jobs:
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
           echo $BASE_IMAGE_DIGEST > ./digest/digest_base_${{ inputs.BaseImageTag }}
-          curl -O https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
+          curl -O --silent https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
           echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound
