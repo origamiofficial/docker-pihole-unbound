@@ -104,7 +104,7 @@ jobs:
           flavor: |
             latest=true
           tags: |
-            type=raw,value=${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
+            type=raw,value=${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
       -
         name: Login to DockerHub
         uses: docker/login-action@v3
@@ -170,22 +170,22 @@ jobs:
         with:
           body: |
             ## Versions
-            Pi-hole: ${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
+            Pi-hole: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}
             Unbound: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             
             ## Docker Tags
             | Tag | Type | Description |
             | :---: | :---: | :---: |
             | `latest` | Stable | Always latest release |
-            | `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}` | Stable | Date-based release [Pi-hole Version-Unbound Version] |
+            | `${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}` | Stable | Date-based release [Pi-hole Version-Unbound Version] |
             
-            ## What's Changed (Docker Image v${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
-            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
+            ## What's Changed (Docker Image v${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.version_code_check_latest.outputs.VERSION_CODE }})
             * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/tag/${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest/digest_base_latest
-          release_name: ${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
-          tag: ${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
+          release_name: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
+          tag: ${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
           make_latest: true
           overwrite: true
       -
@@ -195,7 +195,7 @@ jobs:
         with:
           body: |
             ## Versions
-            Pi-hole: `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
+            Pi-hole: `${{ steps.version_code_check_latest.outputs.VERSION_CODE }}`
             Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
             
             ## What's Changed (Docker Image ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }})
