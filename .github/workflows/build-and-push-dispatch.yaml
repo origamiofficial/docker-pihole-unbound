@@ -11,7 +11,7 @@ on:
         - development-v6
         - dev
         - latest
-        - beta
+        - test
       BaseImageTag:
         description: 'Base Image Tag'
         required: true
