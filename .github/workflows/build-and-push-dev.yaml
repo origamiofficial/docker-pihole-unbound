@@ -145,7 +145,7 @@ jobs:
         with:
           body: |
             ## Versions
-            Pi-hole: `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
+            Pi-hole: `dev-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
             Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
             
             ## What's Changed (Docker Image dev-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})

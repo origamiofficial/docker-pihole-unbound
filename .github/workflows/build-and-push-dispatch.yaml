@@ -195,7 +195,7 @@ jobs:
         with:
           body: |
             ## Versions
-            Pi-hole: `${{ steps.version_code_check_latest.outputs.VERSION_CODE }}`
+            Pi-hole: `${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}`
             Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
             
             ## What's Changed (Docker Image ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }})
