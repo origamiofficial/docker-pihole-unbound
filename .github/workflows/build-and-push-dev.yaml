@@ -117,24 +117,44 @@ jobs:
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.dev,mode=max
       -
-        name: Version code
-        id: version_code_check
+        name: Pi-hole version code
+        id: pihole_version_code_check
         run: |
           CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
           echo "New Version: $CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Unbound version code
+        id: unbound_version_code_check
+        run: |
+          function validate_version() {
+            local version="$1"
+            if [[ ! "$version" =~ ^[0-9]{1}\.[0-9]{2}\.[0-9]{1}$ ]]; then
+              echo "Error invalid version format: $version"
+              exit 1
+            fi
+          }
+          
+          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/NLnetLabs/unbound/releases/latest | grep '"name"' | awk -F'"' '{print $4}' | cut -d' ' -f 2)
+          echo "Unbound Version: $CHECK_VERSION_CODE"
+          validate_version "$CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Create release
         uses: svenstaro/upload-release-action@v2
         with:
           body: |
-            ## What's Changed (Docker Image dev-${{ steps.version_code_check.outputs.VERSION_CODE }})
+            ## Versions
+            Pi-hole: `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
+            Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
+            
+            ## What's Changed (Docker Image dev-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/dev/)
-            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/latest)
+            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/tag/${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest/digest_base_dev
-          release_name: dev-${{ steps.version_code_check.outputs.VERSION_CODE }}
-          tag: dev-${{ steps.version_code_check.outputs.VERSION_CODE }}
+          release_name: dev-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
+          tag: dev-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
           prerelease: true
           overwrite: true
       -
