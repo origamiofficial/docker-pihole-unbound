@@ -169,7 +169,7 @@ jobs:
             | Tag | Type | Description |
             | :---: | :---: | :---: |
             | `latest` | Stable | Always latest release |
-            | `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}` | Date-based release [Pi-hole Version-Unbound Version] |
+            | `${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}` | Stable | Date-based release [Pi-hole Version-Unbound Version] |
             
             ## What's Changed (Docker Image v${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
