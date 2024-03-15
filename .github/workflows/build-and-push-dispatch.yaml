@@ -220,7 +220,7 @@ jobs:
       -
         name: Commit files
         run: |
-          if [[ $(git status) == *"nothing to commit, working tree clean"* ]]; then
+          if [[ $(git status) == *"nothing to commit, working tree clean"* ]] || [[ $(git status) == *"nothing added to commit but untracked files present"* ]]; then
           exit 0
           fi
           git config user.name "GitHub Actions"
