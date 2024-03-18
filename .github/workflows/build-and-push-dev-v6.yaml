@@ -152,7 +152,7 @@ jobs:
             
             ## What's Changed (Docker Image development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/development-v6)
-            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/tag/release-"${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}")
+            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/tag/release-{{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest/digest_base_development-v6
           release_name: development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
