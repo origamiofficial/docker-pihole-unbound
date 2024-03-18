@@ -5,6 +5,10 @@ Level up your network with cutting-edge tech. This Docker container effortlessly
 
 ![alt text](https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/banner.png)
 
+## Notice Board [HELP WANTED]
+
+> Development for the `development-v6` tag is currently on hold. The `development-v6` tag uses Alpine Linux. If you're familiar with Alpine, we encourage you to check out the [Dockerfile-Dev-V6](https://github.com/origamiofficial/docker-pihole-unbound/blob/main/Dockerfile-Dev-V6) file. Your contributions are highly appreciated!
+
 ## Supported Architectures
 
 We utilise the docker buildx for multi-platform awareness. More information is available from docker [here](https://docs.docker.com/buildx/working-with-buildx/).
@@ -44,7 +48,7 @@ The Docker tags supported by this image are:
 | `development-v6` | Beta | [![development-v6 Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev-v6.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev-v6.yaml) | ⏳ | Upcoming `development-v6` release |
 | `test` | Test | ❌ | 🔬 | Testing purpose only |
 
-Note: The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
+> Note: The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
