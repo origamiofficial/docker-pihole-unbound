@@ -159,6 +159,8 @@ jobs:
       -
         name: Create release
         uses: svenstaro/upload-release-action@v2
+        env:
+          UNBOUND_RELEASE_URL: https://github.com/NLnetLabs/unbound/releases/tag/release
         with:
           body: |
             ## Versions
@@ -173,7 +175,7 @@ jobs:
             
             ## What's Changed (Docker Image v${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
             * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/releases/tag/${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
-            * Check Unbound detailed changelog [here.](https://github.com/NLnetLabs/unbound/releases/tag/release-{{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
+            * Check Unbound detailed changelog [here.](${{ env.UNBOUND_RELEASE_URL }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./digest/digest_base_latest
           release_name: ${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
