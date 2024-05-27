@@ -406,7 +406,7 @@ for file in "${config_files[@]}"; do
   if [[ ! -f "/opt/unbound/etc/unbound/$file" ]]; then
     # Download config file only if it's missing
     url="https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/data/opt/unbound/etc/unbound/$file"
-    wget -qO "/opt/unbound/etc/unbound/$file" "$url"
+    curl -s -o "/opt/unbound/etc/unbound/$file" "$url"
     echo "Downloaded missing config: $file" >&2
   fi
 done
