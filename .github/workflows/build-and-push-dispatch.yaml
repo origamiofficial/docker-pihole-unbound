@@ -138,7 +138,7 @@ jobs:
       -
         name: Build and push [latest]
         if: inputs.BaseImageTag == 'latest'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
@@ -155,7 +155,7 @@ jobs:
       -
         name: Build and push [dev]
         if: inputs.BaseImageTag == 'dev'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
@@ -172,7 +172,7 @@ jobs:
       -
         name: Build and push [development-v6]
         if: inputs.BaseImageTag == 'development-v6'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
@@ -190,7 +190,7 @@ jobs:
       -
         name: Build and push [platform]
         if: inputs.BaseImageTag == 'platform'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
         with:
