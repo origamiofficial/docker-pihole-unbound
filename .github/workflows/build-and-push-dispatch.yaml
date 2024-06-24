@@ -256,6 +256,7 @@ jobs:
           overwrite: true
       -
         name: Update digest to file
+        if: inputs.BuildImageTag != 'test'
         run: |
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BuildImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
@@ -266,6 +267,7 @@ jobs:
           echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound
       -
         name: Commit files
+        if: inputs.BuildImageTag != 'test'
         run: |
           if [[ $(git status) == *"nothing to commit, working tree clean"* ]] || [[ $(git status) == *"nothing added to commit but untracked files present"* ]]; then
           exit 0
@@ -275,6 +277,7 @@ jobs:
           git commit -a -m "Digest Value Updated"
       -
         name: Push changes to repository
+        if: inputs.BuildImageTag != 'test'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
