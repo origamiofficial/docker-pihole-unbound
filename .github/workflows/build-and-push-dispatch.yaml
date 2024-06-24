@@ -121,7 +121,7 @@ jobs:
             type=raw,value=${{ steps.version_code_check_latest.outputs.VERSION_CODE }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
       -
         name: Docker meta [platform]
-        if: inputs.BaseImageTag == 'platform'
+        if: inputs.BuildPlatform != 'N/A'
         id: meta_platform
         uses: docker/metadata-action@v5
         with:
@@ -191,7 +191,7 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
         name: Build and push [platform]
-        if: inputs.BaseImageTag == 'platform'
+        if: inputs.BuildPlatform != 'N/A'
         uses: docker/build-push-action@v6
         env:
           IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
