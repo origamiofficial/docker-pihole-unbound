@@ -25,6 +25,7 @@ on:
       BuildPlatform:
         description: 'Build Image Platform'
         required: false
+        default: 'N/A'
         type: choice
         options:
         - N/A
@@ -62,7 +63,7 @@ jobs:
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Version code [latest]
-        if: inputs.BaseImageTag == 'latest'
+        if: inputs.BuildImageTag == 'latest'
         id: version_code_check_latest
         run: |
           function validate_version() {
@@ -79,10 +80,10 @@ jobs:
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Version code [dev / development-v6]
-        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
+        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
         id: version_code_check
         run: |
-          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BuildImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
           echo "New Version: $CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
@@ -93,7 +94,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
       -
         name: Docker meta [dev / development-v6]
-        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
+        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
         id: meta
         uses: docker/metadata-action@v5
         env:
@@ -107,7 +108,7 @@ jobs:
             type=raw,value=${{ inputs.BuildImageTag }}
       -
         name: Docker meta [latest]
-        if: inputs.BaseImageTag == 'latest'
+        if: inputs.BuildImageTag == 'latest'
         id: meta_latest
         uses: docker/metadata-action@v5
         with:
@@ -137,41 +138,41 @@ jobs:
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       -
         name: Build and push [latest]
-        if: inputs.BaseImageTag == 'latest'
+        if: inputs.BuildImageTag == 'latest'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: BASE_IMG_TAG=${{ inputs.BaseImageTag }}
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta_latest.outputs.tags }}
           labels: ${{ steps.meta_latest.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BaseImageTag }}
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
         name: Build and push [dev]
-        if: inputs.BaseImageTag == 'dev'
+        if: inputs.BuildImageTag == 'dev'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: BASE_IMG_TAG=${{ inputs.BaseImageTag }}
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BaseImageTag }}
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
         name: Build and push [development-v6]
-        if: inputs.BaseImageTag == 'development-v6'
+        if: inputs.BuildImageTag == 'development-v6'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -179,12 +180,12 @@ jobs:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: BASE_IMG_TAG=${{ inputs.BaseImageTag }}
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BaseImageTag }}
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
@@ -206,7 +207,7 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.test,mode=max
       -
         name: Create release [Release]
-        if: inputs.BaseImageTag == 'latest'
+        if: inputs.BuildImageTag == 'latest'
         uses: svenstaro/upload-release-action@v2
         env:
           UNBOUND_RELEASE_URL: https://github.com/NLnetLabs/unbound/releases/tag/release
@@ -233,31 +234,31 @@ jobs:
           overwrite: true
       -
         name: Create release [PreRelease]
-        if: inputs.BaseImageTag == 'dev' || inputs.BaseImageTag == 'development-v6'
+        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
         uses: svenstaro/upload-release-action@v2
         env:
           UNBOUND_RELEASE_URL: https://github.com/NLnetLabs/unbound/releases/tag/release
         with:
           body: |
             ## Versions
-            Pi-hole: `${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}`
+            Pi-hole: `${{ inputs.BuildImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}`
             Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
             
-            ## What's Changed (Docker Image ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }})
-            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/${{ inputs.BaseImageTag }})
+            ## What's Changed (Docker Image ${{ inputs.BuildImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/${{ inputs.BuildImageTag }})
             * Check Unbound detailed changelog [here.](${{ env.UNBOUND_RELEASE_URL }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./digest/digest_base_${{ inputs.BaseImageTag }}
-          release_name: ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}
-          tag: ${{ inputs.BaseImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}
+          file: ./digest/digest_base_${{ inputs.BuildImageTag }}
+          release_name: ${{ inputs.BuildImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}
+          tag: ${{ inputs.BuildImageTag }}-${{ steps.version_code_check.outputs.VERSION_CODE }}
           prerelease: true
           overwrite: true
       -
         name: Update digest to file
         run: |
-          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BaseImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BuildImageTag }} | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./digest/digest_base_${{ inputs.BaseImageTag }}
+          echo $BASE_IMAGE_DIGEST > ./digest/digest_base_${{ inputs.BuildImageTag }}
           curl -O --silent https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
