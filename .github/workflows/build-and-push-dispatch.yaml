@@ -199,7 +199,7 @@ jobs:
           context: ./
           platforms: ${{ inputs.BuildPlatform }}
           build-args: BASE_IMG_TAG=latest
-          push: true
+          push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
           labels: ${{ steps.meta_platform.outputs.labels }}
           cache-from: |
