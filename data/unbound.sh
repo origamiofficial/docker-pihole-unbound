@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "ARCHITECTURE=$(uname -m)"
+cat /etc/os-release
+echo "UNBOUND=$(/opt/unbound/sbin/unbound -V)"
+
 reserved=12582912
 availableMemory=$((1024 * $( (grep MemAvailable /proc/meminfo || grep MemTotal /proc/meminfo) | sed 's/[^0-9]//g' ) ))
 memoryLimit=$availableMemory
