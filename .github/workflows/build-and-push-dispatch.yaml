@@ -35,6 +35,14 @@ on:
         - linux/arm/v7
         - linux/arm/v6
         - linux/riscv64
+      UseOldCache:
+        description: 'Build Image Using Old Cache'
+        required: true
+        default: 'yes'
+        type: choice
+        options:
+        - yes
+        - no
 
 jobs:
   job01:
@@ -138,8 +146,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       -
-        name: Build and push [latest]
-        if: inputs.BuildImageTag == 'latest'
+        name: Build and push [latest / use cache]
+        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'yes'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -152,6 +160,21 @@ jobs:
           labels: ${{ steps.meta_latest.outputs.labels }}
           cache-from: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
+      -
+        name: Build and push [latest / no cache]
+        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'no'
+        uses: docker/build-push-action@v6
+        env:
+          IMAGE_TAG: ${{ inputs.BuildImageTag }}
+        with:
+          context: ./
+          platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
+          push: true
+          tags: ${{ steps.meta_latest.outputs.tags }}
+          labels: ${{ steps.meta_latest.outputs.labels }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
