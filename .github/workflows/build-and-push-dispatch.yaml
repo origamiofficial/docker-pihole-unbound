@@ -38,11 +38,11 @@ on:
       UseOldCache:
         description: 'Build Image Using Old Cache'
         required: true
-        default: 'yes'
+        default: 'true'
         type: choice
         options:
-        - yes
-        - no
+        - true
+        - false
 
 jobs:
   job01:
@@ -147,7 +147,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       -
         name: Build and push [latest / use cache]
-        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'yes'
+        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'true'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -164,7 +164,7 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
         name: Build and push [latest / no cache]
-        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'no'
+        if: inputs.BuildImageTag == 'latest' && inputs.UseOldCache == 'false'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
