@@ -8,8 +8,7 @@ on:
         default: 'latest'
         type: choice
         options:
-        - development-v6
-        - dev
+        - development
         - latest
         - test
       BaseImageTag:
@@ -18,8 +17,7 @@ on:
         default: 'latest'
         type: choice
         options:
-        - development-v6
-        - dev
+        - development
         - latest
         - platform
       BuildPlatform:
@@ -88,8 +86,8 @@ jobs:
           validate_version "$CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
-        name: Version code [dev / development-v6]
-        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
+        name: Version code [development]
+        if: inputs.BuildImageTag == 'development'
         id: version_code_check
         run: |
           CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/${{ inputs.BuildImageTag }} | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
@@ -102,8 +100,8 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Docker meta [dev / development-v6]
-        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
+        name: Docker meta [development]
+        if: inputs.BuildImageTag == 'development'
         id: meta
         uses: docker/metadata-action@v5
         env:
@@ -178,13 +176,14 @@ jobs:
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
-        name: Build and push [dev]
-        if: inputs.BuildImageTag == 'dev'
+        name: Build and push [development / use cache]
+        if: inputs.BuildImageTag == 'development' && inputs.UseOldCache == 'true'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
         with:
           context: ./
+          file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
@@ -195,8 +194,8 @@ jobs:
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
-        name: Build and push [development-v6 / use cache]
-        if: inputs.BuildImageTag == 'development-v6' && inputs.UseOldCache == 'true'
+        name: Build and push [development / no cache]
+        if: inputs.BuildImageTag == 'development' && inputs.UseOldCache == 'false'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -204,23 +203,7 @@ jobs:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
-          cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
-      -
-        name: Build and push [development-v6 / no cache]
-        if: inputs.BuildImageTag == 'development-v6' && inputs.UseOldCache == 'false'
-        uses: docker/build-push-action@v6
-        env:
-          IMAGE_TAG: ${{ inputs.BuildImageTag }}
-        with:
-          context: ./
-          file: ./Dockerfile-Dev-V6
-          platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -272,7 +255,7 @@ jobs:
           overwrite: true
       -
         name: Create release [PreRelease]
-        if: inputs.BuildImageTag == 'dev' || inputs.BuildImageTag == 'development-v6'
+        if: inputs.BuildImageTag == 'development'
         uses: svenstaro/upload-release-action@v2
         env:
           UNBOUND_RELEASE_URL: https://github.com/NLnetLabs/unbound/releases/tag/release

@@ -29,10 +29,10 @@ jobs:
             fi
           }
           
-          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development | grep -oP '"digest":"\K[^"]+' | tail -1)
           validate_digest "$BASE_IMAGE_DIGEST"
           
-          PREVIOUS_DIGEST=$(cat ./digest/digest_base_development-v6)
+          PREVIOUS_DIGEST=$(cat ./digest/digest_base_development)
           validate_digest "$PREVIOUS_DIGEST"
           
           if [ "$BASE_IMAGE_DIGEST" == "$PREVIOUS_DIGEST" ]; then
@@ -59,7 +59,7 @@ jobs:
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           validate_digest "$LATEST_UNBOUND_DIGEST"
           
-          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest/digest_unbound_development-v6)
+          PREVIOUS_UNBOUND_DIGEST=$(cat ./digest/digest_unbound_development)
           validate_digest "$PREVIOUS_UNBOUND_DIGEST"
           
           if [ "$LATEST_UNBOUND_DIGEST" == "$PREVIOUS_UNBOUND_DIGEST" ]; then
@@ -96,7 +96,7 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,value=development-v6
+            type=raw,value=development
       -
         name: Login to DockerHub
         uses: docker/login-action@v3
@@ -110,19 +110,19 @@ jobs:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: BASE_IMG_TAG=development-v6
+          build-args: BASE_IMG_TAG=development
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.development-v6
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.development
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.development-v6,mode=max
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.development,mode=max
       -
         name: Pi-hole version code
         id: pihole_version_code_check
         run: |
-          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
           echo "New Version: $CHECK_VERSION_CODE"
           echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
@@ -149,28 +149,28 @@ jobs:
         with:
           body: |
             ## Versions
-            Pi-hole: `development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
+            Pi-hole: `development-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}`
             Unbound: `${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}`
             
-            ## What's Changed (Docker Image development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
-            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/development-v6)
+            ## What's Changed (Docker Image development-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }})
+            * Check Pi-hole Docker detailed changelog [here.](https://github.com/pi-hole/docker-pi-hole/commits/development)
             * Check Unbound detailed changelog [here.](${{ env.UNBOUND_RELEASE_URL }}-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }})
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./digest/digest_base_development-v6
-          release_name: development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
-          tag: development-v6-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
+          file: ./digest/digest_base_development
+          release_name: development-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
+          tag: development-${{ steps.pihole_version_code_check.outputs.VERSION_CODE }}
           prerelease: true
           overwrite: true
       -
         name: Update digest to file
         run: |
-          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development-v6 | grep -oP '"digest":"\K[^"]+' | tail -1)
+          BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/development | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
-          echo $BASE_IMAGE_DIGEST > ./digest/digest_base_development-v6
+          echo $BASE_IMAGE_DIGEST > ./digest/digest_base_development
           curl -O --silent https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
-          echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound_development-v6
+          echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound_development
       -
         name: Commit files
         run: |
