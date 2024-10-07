@@ -195,8 +195,8 @@ jobs:
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
-        name: Build and push [development-v6]
-        if: inputs.BuildImageTag == 'development-v6'
+        name: Build and push [development-v6 / use cache]
+        if: inputs.BuildImageTag == 'development-v6' && inputs.UseOldCache == 'true'
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
@@ -210,6 +210,22 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }}
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
+      -
+        name: Build and push [development-v6 / no cache]
+        if: inputs.BuildImageTag == 'development-v6' && inputs.UseOldCache == 'false'
+        uses: docker/build-push-action@v6
+        env:
+          IMAGE_TAG: ${{ inputs.BuildImageTag }}
+        with:
+          context: ./
+          file: ./Dockerfile-Dev-V6
+          platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
