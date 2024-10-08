@@ -5,9 +5,19 @@ FROM pihole/pihole:${BASE_IMG_TAG} as openssl
 
 WORKDIR /tmp/src
 
-RUN set -e -x && \
-    build_deps="build-base ca-certificates curl dirmngr gnupg libidn2-dev libssl-dev" && \
-    apk add --update --no-cache $build_deps && \
+RUN set -xe; \
+  apk --update --no-cache add \
+  ca-certificates \
+  gnupg \
+  curl \
+  file && \
+  apk --update --no-cache add --virtual .build-deps \
+    build-base \
+    perl \
+    libidn2-dev \
+    libevent-dev \
+    linux-headers \
+    apk-tools && \
     git clone https://github.com/openssl/openssl.git && \
     cd openssl && \
     ./config \
@@ -21,15 +31,19 @@ RUN set -e -x && \
     make depend && \
     nproc | xargs -I % make -j% && \
     make install_sw && \
-    apk del --no-cache $build_deps && \
-    rm -rf \
-        /tmp/* \
-        /var/tmp/* \
-        /var/cache/apk/* \
-        /var/lib/apk/lists/*
+  apk del --no-cache .build-deps && \
+  pkill -9 gpg-agent && \
+  pkill -9 dirmngr && \
+  rm -rf \
+    /usr/share/man \
+    /usr/share/docs \
+    /opt/openssl/bin \
+    /tmp/* \
+    /var/tmp/* \
+    /var/log/* 
 
 
-FROM pihole/pihole:${BASE_IMG_TAG} AS unbound
+FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
 ENV NAME=unbound \
     UNBOUND_VERSION=latest \
@@ -39,46 +53,57 @@ WORKDIR /tmp/src
 
 COPY --from=openssl /opt/openssl /opt/openssl
 
-RUN build_deps="curl gcc musl-dev libevent-dev libexpat-dev libnghttp2-dev make flex bison" && \
-    set -x && \
-    apk add --update --no-cache $build_deps \
-      bsdmainutils \
-      ca-certificates \
-      ldnsutils \
-      libevent-2.1-7 \
-      libexpat1 \
-      libprotobuf-c-dev \
-      protobuf-c-compiler && \
-    curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
-    tar xzf unbound.tar.gz && \
-    rm -f unbound.tar.gz && \
-    mv unbound-* unbound && \
-    cd unbound && \
-    groupadd _unbound && \
-    useradd -g _unbound -s /dev/null -d /etc _unbound && \
-    ./configure \
-        --disable-dependency-tracking \
-        --prefix=/opt/unbound \
-        --with-pthreads \
-        --with-username=_unbound \
-        --with-ssl=/opt/openssl \
-        --with-libevent \
-        --with-libnghttp2 \
-        --enable-dnstap \
-        --enable-tfo-server \
-        --enable-tfo-client \
-        --enable-event-api \
-        --enable-subnet && \
-    make install && \
-    mv /opt/unbound/etc/unbound/unbound.conf /opt/unbound/etc/unbound/unbound.conf.example && \
-    apk del --no-cache $build_deps && \
-    rm -rf \
-        /opt/unbound/share/man \
-        /tmp/* \
-        /var/tmp/* \
-        /var/cache/apk/* \
-        /var/lib/apk/lists/*
-
+RUN set -xe; \
+  apk --update --no-cache add \
+  ca-certificates \
+  gnupg \
+  curl \
+  file \ 
+  binutils && \
+  apk --update --no-cache add --virtual .build-deps \
+    build-base\
+    libsodium-dev \
+    linux-headers \
+    nghttp2-dev \
+    ngtcp2-dev \
+    libevent-dev \
+    expat-dev \
+    protobuf-c-dev \
+    hiredis-dev \
+    apk-tools && \
+  curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
+  tar xzf unbound.tar.gz && \
+  rm -f unbound.tar.gz && \
+  mv unbound-* unbound && \
+  cd unbound && \
+  addgroup -S -g 1000 _unbound && \
+  adduser -S -H -h /etc -g _unbound -u 1000 -D -G _unbound _unbound && \
+  ./configure \
+      --disable-dependency-tracking \
+      --prefix=/opt/unbound \
+      --with-pthreads \
+      --with-username=_unbound \
+      --with-ssl=/opt/openssl \
+      --with-libevent \
+      --with-libnghttp2 \
+      --enable-dnstap \
+      --enable-tfo-server \
+      --enable-tfo-client \
+      --enable-event-api \
+      --enable-subnet && \
+  make install && \
+  mv /opt/unbound/etc/unbound/unbound.conf /opt/unbound/etc/unbound/unbound.conf.example && \
+  apk del --no-cache .build-deps && \
+  pkill -9 gpg-agent && \
+  pkill -9 dirmngr && \
+  rm -rf \
+    /usr/share/man \
+    /usr/share/docs \
+    /opt/unbound/share/man \
+    /tmp/* \
+    /var/tmp/* \
+    /var/log/*
+	
 
 FROM pihole/pihole:${BASE_IMG_TAG}
 
@@ -86,25 +111,32 @@ WORKDIR /tmp/src
 
 COPY --from=unbound /opt /opt
 
-RUN set -x && \
-    apk add --update --no-cache \
-      bsdmainutils \
-      ca-certificates \
-      ldnsutils \
-      libevent-2.1-7 \
-      libnghttp2-14 \
-      libexpat1 \
-      libprotobuf-c1 && \
-    groupadd _unbound && \
-    useradd -g _unbound -s /dev/null -d /etc _unbound && \
-    apk del --no-cache $build_deps && \
-    rm -rf \
-        /opt/unbound/share/man \
-        /tmp/* \
-        /var/tmp/* \
-        /var/cache/apk/* \
-        /var/lib/apk/lists/*
-
+RUN set -xe; \
+    apk --update --no-cache add \
+    ca-certificates \
+    tzdata \
+    drill \
+    tini \
+    shadow \
+    su-exec \
+    libsodium \
+    nghttp2 \
+    ngtcp2 \
+    libevent \
+    protobuf-c \
+    hiredis \
+    expat && \
+  addgroup -S -g 1000 _unbound && \
+  adduser -S -H -h /etc -g _unbound -u 1000 -D -G _unbound _unbound && \
+  apk del --no-cache .build-deps && \
+  rm -rf \
+    /usr/share/man \
+    /usr/share/docs \
+    /opt/unbound/share/man \
+    /tmp/* \
+    /var/tmp/* \
+    /var/log/*
+    
 WORKDIR /opt/unbound/
 
 # copy extra files
@@ -117,7 +149,7 @@ RUN chmod +x /unbound.sh
 LABEL maintainer="OrigamiOfficial"
 
 # environment settings
-ENV PIHOLE_DNS_ 127.0.0.1#5335
+ENV FTLCONF_dns_upstreams 127.0.0.1#5335
 ENV PATH /opt/unbound/sbin:"$PATH"
 
 # target run
