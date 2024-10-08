@@ -32,8 +32,6 @@ RUN set -xe; \
     nproc | xargs -I % make -j% && \
     make install_sw && \
   apk del --no-cache .build-deps && \
-  pkill -9 gpg-agent && \
-  pkill -9 dirmngr && \
   rm -rf \
     /usr/share/man \
     /usr/share/docs \
@@ -94,8 +92,6 @@ RUN set -xe; \
   make install && \
   mv /opt/unbound/etc/unbound/unbound.conf /opt/unbound/etc/unbound/unbound.conf.example && \
   apk del --no-cache .build-deps && \
-  pkill -9 gpg-agent && \
-  pkill -9 dirmngr && \
   rm -rf \
     /usr/share/man \
     /usr/share/docs \
