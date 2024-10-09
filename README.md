@@ -43,11 +43,11 @@ The Docker tags supported by this image are:
 | :-----: | :-----: | :-----: | :-----: | :-----: |
 | `latest` | Stable | [![latest Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-latest.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) | ✅ | Always latest release |
 | `2024.02.2-1.19.3` | Stable | [![date Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-latest.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-latest.yaml) | ✅ | Date-based release [Pi-hole Version-Unbound Version] |
-| `dev` | Beta | [![dev Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev.yaml) | ✅ | Similar to `latest`, but for the development branch (pushed occasionally) |
-| `development-v6` | Beta | [![development-v6 Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev-v6.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev-v6.yaml) | ⏳ | Upcoming `development-v6` release |
+| `dev` | Beta | [![dev Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev.yaml) | ❌ | [deprecated] Similar to `latest`, but for the development branch (pushed occasionally) |
+| `development` | Beta | [![development-v6 Build](https://img.shields.io/github/actions/workflow/status/origamiofficial/docker-pihole-unbound/build-and-push-dev-v6.yaml)](https://github.com/origamiofficial/docker-pihole-unbound/actions/workflows/build-and-push-dev-v6.yaml) | ✅ | Upcoming Alpine based v6 release |
 | `test` | Test | ❌ | 🔬 | Testing purpose only |
 
-> Note: The `development-v6` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development-v6` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
+> Note: The `development` has been entirely redesigned from the ground up and contains many [breaking changes](https://github.com/pi-hole/docker-pi-hole/blob/development-v6/README.md), for more info regarding `development` visit [here](https://pi-hole.net/blog/2023/10/09/pi-hole-v6-beta-testing/).
 
 ### Installing on Ubuntu
 Modern releases of Ubuntu (17.10+) include [`systemd-resolved`](http://manpages.ubuntu.com/manpages/bionic/man8/systemd-resolved.service.8.html) which is configured by default to implement a caching DNS stub resolver. This will prevent pi-hole from listening on port 53.
@@ -104,6 +104,8 @@ However, the upstream projects most certainly also deserve credit for making thi
 - [NLnetLabs](https://github.com/NLnetLabs).
 - [MatthewVance](https://github.com/MatthewVance).
 - [chriscrowe](https://github.com/chriscrowe).
+- [madnuttah](https://github.com/madnuttah).
+- The many other devs who got me inspired!
 
 ## Warning
 
