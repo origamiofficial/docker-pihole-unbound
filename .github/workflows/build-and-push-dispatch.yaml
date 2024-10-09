@@ -211,14 +211,32 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.${{ inputs.BuildImageTag }},mode=max
       -
         name: Build and push [platform]
-        if: inputs.BuildPlatform != 'N/A'
+        if: inputs.BuildPlatform != 'N/A' && inputs.BaseImageTag != 'development'
         uses: docker/build-push-action@v6
         env:
           IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
         with:
           context: ./
           platforms: ${{ inputs.BuildPlatform }}
-          build-args: BASE_IMG_TAG=latest
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
+          push: false
+          tags: ${{ steps.meta_platform.outputs.tags }}
+          labels: ${{ steps.meta_platform.outputs.labels }}
+          cache-from: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.test
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.test,mode=max
+      -
+        name: Build and push [platform - development]
+        if: inputs.BuildPlatform != 'N/A' && inputs.BaseImageTag == 'development'
+        uses: docker/build-push-action@v6
+        env:
+          IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
+        with:
+          context: ./
+          file: ./Dockerfile-Dev-V6
+          platforms: ${{ inputs.BuildPlatform }}
+          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
           labels: ${{ steps.meta_platform.outputs.labels }}
