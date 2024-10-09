@@ -6,7 +6,7 @@ Level up your network with cutting-edge tech. This Docker container effortlessly
 ![alt text](https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/banner.png)
 
 > [!NOTE]
-> Development for the `development-v6` tag is currently on hold. The `development-v6` tag uses Alpine Linux. If you're familiar with Alpine, we encourage you to check out the [Dockerfile-Dev-V6](https://github.com/origamiofficial/docker-pihole-unbound/blob/main/Dockerfile-Dev-V6) file. Your contributions are highly appreciated!
+> Development for the `development` tag is currently on going, there cloud be some bugs. The `development` tag uses Alpine Linux. If you're familiar with Alpine, we encourage you to check out the [Dockerfile-Dev-V6](https://github.com/origamiofficial/docker-pihole-unbound/blob/main/Dockerfile-Dev-V6) file. Your contributions are highly appreciated!
 
 ## Supported Architectures
 
