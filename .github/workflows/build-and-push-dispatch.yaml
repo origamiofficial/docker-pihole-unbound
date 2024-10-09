@@ -236,7 +236,7 @@ jobs:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: ${{ inputs.BuildPlatform }}
-          build-args: BASE_IMG_TAG=${{ inputs.BuildImageTag }}
+          build-args: BASE_IMG_TAG=${{ inputs.BaseImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
           labels: ${{ steps.meta_platform.outputs.labels }}
