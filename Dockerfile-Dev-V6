@@ -121,7 +121,8 @@ RUN set -xe; \
     libevent \
     protobuf-c \
     hiredis \
-    expat && \
+    expat \
+    perl && \
   addgroup -S -g 1000 _unbound && \
   adduser -S -H -h /etc -g _unbound -u 1000 -D -G _unbound _unbound && \
   rm -rf \
