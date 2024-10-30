@@ -23,10 +23,10 @@ The architectures supported by this image are:
 | armhf | ✅ | linux/arm/v7 |
 | armel | ✅ | linux/arm/v6 |
 
-## Usage
+## Usage with docker run
 Here are the commands you'll need:
 ```bash
-docker run -d --name pihole-unbound \
+docker run -d \
   --name=pihole-unbound \
   -e TZ=Europe/London `#optional` \
   -p 53:53/tcp -p 53:53/udp \
@@ -34,6 +34,40 @@ docker run -d --name pihole-unbound \
   -e WEBPASSWORD='qwerty123' `#better to use single quotes` \
   --restart=always \
   rlabinc/pihole-unbound:latest
+```
+
+## Usage with Docker Compose
+
+To deploy this project using Docker Compose, you can use the following example `docker-compose.yml`:
+
+```yaml
+version: '3'
+
+services:
+  pihole-unbound:
+    image: rlabinc/pihole-unbound:latest
+    container_name: pihole-unbound
+    environment:
+      - TZ=Europe/London # Adjust timezone as needed
+      - WEBPASSWORD=qwerty123 # Set a secure password
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp" #Pi-hole web interface port
+    restart: always
+```
+
+This example configuration will run Pi-hole with Unbound, listening on port 53 for DNS queries and port 80 for the web interface.
+Make sure to adjust the environment variables, password, and timezone according to your setup.
+
+To start the container, use:
+```bash
+docker-compose up -d
+```
+
+To stop the container, use:
+```bash
+docker-compose down
 ```
 
 ### Docker Tags
