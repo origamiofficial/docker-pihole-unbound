@@ -23,7 +23,8 @@ The architectures supported by this image are:
 | armhf | ✅ | linux/arm/v7 |
 | armel | ✅ | linux/arm/v6 |
 
-## Usage with docker run
+## Usage
+### Docker run
 Here are the commands you'll need:
 ```bash
 docker run -d \
@@ -36,7 +37,7 @@ docker run -d \
   rlabinc/pihole-unbound:latest
 ```
 
-## Usage with Docker Compose
+### Docker Compose
 
 To deploy this project using Docker Compose, you can use the following example `docker-compose.yml`:
 
