@@ -6,7 +6,7 @@ Level up your network with cutting-edge tech. This Docker container effortlessly
 ![alt text](https://raw.githubusercontent.com/origamiofficial/docker-pihole-unbound/main/banner.png)
 
 > [!NOTE]
-> Development for the `development` tag is currently on going, there cloud be some bugs. The `development` tag uses Alpine Linux. If you're familiar with Alpine, we encourage you to check out the [Dockerfile-Dev-V6](https://github.com/origamiofficial/docker-pihole-unbound/blob/main/Dockerfile-Dev-V6) file. Your contributions are highly appreciated!
+> Development for the `development` tag is currently ongoing, there could be some bugs. The `development` tag uses Alpine Linux. If you're familiar with Alpine, we encourage you to check out the [Dockerfile-Dev-V6](https://github.com/origamiofficial/docker-pihole-unbound/blob/main/Dockerfile-Dev-V6) file. Your contributions are highly appreciated!
 
 ## Supported Architectures
 
@@ -70,6 +70,9 @@ To stop the container, use:
 ```bash
 docker-compose down
 ```
+
+> [!TIP]
+> Mikrotik users: Facing `cp: cannot create special file`, the solution was letting RouterOS create the mounted volume itself, and not manually creating a "directory" beforehand. As result, the mount appears as "container store" (so not a "directory"), accessible via SFTP (and not via Winbox/WebFig) for pushing custom Unbound config. - [@riccardo1991](https://github.com/origamiofficial/docker-pihole-unbound/issues/30#issuecomment-2526363715)
 
 ### Docker Tags
 The Docker tags supported by this image are:
