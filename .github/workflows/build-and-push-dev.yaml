@@ -80,29 +80,6 @@ jobs:
         with:
           ref: main
       -
-        name: Pi-hole version code
-        id: pihole_version_code_check
-        run: |
-          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
-          echo "New Version: $CHECK_VERSION_CODE"
-          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
-      -
-        name: Unbound version code
-        id: unbound_version_code_check
-        run: |
-          function validate_version() {
-            local version="$1"
-            if [[ ! "$version" =~ ^[0-9]{1}\.[0-9]{2}\.[0-9]{1}$ ]]; then
-              echo "Error invalid version format: $version"
-              exit 1
-            fi
-          }
-          
-          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/NLnetLabs/unbound/releases/latest | grep '"name"' | awk -F'"' '{print $4}' | cut -d' ' -f 2)
-          echo "Unbound Version: $CHECK_VERSION_CODE"
-          validate_version "$CHECK_VERSION_CODE"
-          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
-      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       -
@@ -131,9 +108,7 @@ jobs:
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
-          build-args: |
-            BASE_IMG_TAG=dev
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
+          build-args: BASE_IMG_TAG=dev
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -141,6 +116,29 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.dev
           cache-to: |
             type=registry,ref=${{ secrets.DOCKERHUB_NAMESPACE }}/docker-cache:buildcache.pihole-unbound.dev,mode=max
+      -
+        name: Pi-hole version code
+        id: pihole_version_code_check
+        run: |
+          CHECK_VERSION_CODE=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"tag_last_pushed":"\K[^"]+' | tail -1 | cut -c 1-9 | sed 's/-/./g')
+          echo "New Version: $CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
+      -
+        name: Unbound version code
+        id: unbound_version_code_check
+        run: |
+          function validate_version() {
+            local version="$1"
+            if [[ ! "$version" =~ ^[0-9]{1}\.[0-9]{2}\.[0-9]{1}$ ]]; then
+              echo "Error invalid version format: $version"
+              exit 1
+            fi
+          }
+          
+          CHECK_VERSION_CODE=$(curl -s https://api.github.com/repos/NLnetLabs/unbound/releases/latest | grep '"name"' | awk -F'"' '{print $4}' | cut -d' ' -f 2)
+          echo "Unbound Version: $CHECK_VERSION_CODE"
+          validate_version "$CHECK_VERSION_CODE"
+          echo VERSION_CODE=$CHECK_VERSION_CODE >> $GITHUB_OUTPUT
       -
         name: Create release
         uses: svenstaro/upload-release-action@v2
@@ -167,7 +165,7 @@ jobs:
           BASE_IMAGE_DIGEST=$(curl -s https://registry.hub.docker.com/v2/repositories/pihole/pihole/tags/dev | grep -oP '"digest":"\K[^"]+' | tail -1)
           echo "New Base Digest: $BASE_IMAGE_DIGEST"
           echo $BASE_IMAGE_DIGEST > ./digest/digest_base_dev
-          curl -O --silent https://nlnetlabs.nl/downloads/unbound/unbound-${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}.tar.gz -o unbound-latest.tar.gz
+          curl -O --silent https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
           LATEST_UNBOUND_DIGEST=$(sha256sum unbound-latest.tar.gz | cut -d ' ' -f 1)
           echo "New Unbound Digest: $LATEST_UNBOUND_DIGEST"
           echo $LATEST_UNBOUND_DIGEST > ./digest/digest_unbound_dev
