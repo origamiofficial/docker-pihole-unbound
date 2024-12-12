@@ -1,5 +1,6 @@
-# Define an ARG for the base image tag
+# Define ARG
 ARG BASE_IMG_TAG=none
+ARG UNBOUND_VERSION_CODE=none
 
 FROM pihole/pihole:${BASE_IMG_TAG} as openssl
 
@@ -35,7 +36,7 @@ FROM pihole/pihole:${BASE_IMG_TAG} as unbound
 
 ENV NAME=unbound \
     UNBOUND_VERSION=latest \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION_CODE}.tar.gz
 
 WORKDIR /tmp/src
 
