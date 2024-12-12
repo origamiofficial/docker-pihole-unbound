@@ -1,8 +1,8 @@
 name: Dev-v6 Build & Push
 on:
   workflow_dispatch:
-  #schedule:
-    #- cron: '0 11 * * *'
+  schedule:
+    - cron: '0 11 * * *'
 
 jobs:
   job01:
