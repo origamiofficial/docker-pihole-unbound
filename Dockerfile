@@ -1,5 +1,6 @@
-# Define an ARG for the base image tag
+# Define ARG
 ARG BASE_IMG_TAG=none
+ARG UNBOUND_VERSION_CODE=none
 
 FROM pihole/pihole:${BASE_IMG_TAG} as openssl
 
