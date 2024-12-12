@@ -106,6 +106,8 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v6
+        env:
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           file: ./Dockerfile-Dev-V6

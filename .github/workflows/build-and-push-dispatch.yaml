@@ -149,11 +149,11 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta_latest.outputs.tags }}
@@ -168,11 +168,11 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta_latest.outputs.tags }}
@@ -185,12 +185,12 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -205,12 +205,12 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_TAG: ${{ inputs.BuildImageTag }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -223,11 +223,11 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           platforms: ${{ inputs.BuildPlatform }}
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
@@ -242,12 +242,12 @@ jobs:
         uses: docker/build-push-action@v6
         env:
           IMAGE_PLATFORM: ${{ inputs.BuildPlatform }}
+          UNBOUND_VERSION_CODE: ${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
         with:
           context: ./
           file: ./Dockerfile-Dev-V6
           platforms: ${{ inputs.BuildPlatform }}
           build-args: |
-            UNBOUND_VERSION_CODE=${{ steps.unbound_version_code_check.outputs.VERSION_CODE }}
             BASE_IMG_TAG=${{ inputs.BaseImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
