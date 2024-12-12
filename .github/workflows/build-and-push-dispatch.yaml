@@ -154,6 +154,7 @@ jobs:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta_latest.outputs.tags }}
@@ -173,6 +174,7 @@ jobs:
           context: ./
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta_latest.outputs.tags }}
@@ -191,6 +193,7 @@ jobs:
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -211,6 +214,7 @@ jobs:
           file: ./Dockerfile-Dev-V6
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/arm/v6
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -228,6 +232,7 @@ jobs:
           context: ./
           platforms: ${{ inputs.BuildPlatform }}
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BuildImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
@@ -248,6 +253,7 @@ jobs:
           file: ./Dockerfile-Dev-V6
           platforms: ${{ inputs.BuildPlatform }}
           build-args: |
+            UNBOUND_VERSION_CODE=UNBOUND_VERSION_CODE
             BASE_IMG_TAG=${{ inputs.BaseImageTag }}
           push: false
           tags: ${{ steps.meta_platform.outputs.tags }}
