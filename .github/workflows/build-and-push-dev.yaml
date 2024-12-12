@@ -1,7 +1,7 @@
 name: Dev Build & Push
 on:
-  schedule:
-    - cron: '0 3 * * *'
+  #schedule:
+    #- cron: '0 3 * * *'
 
 jobs:
   job01:
