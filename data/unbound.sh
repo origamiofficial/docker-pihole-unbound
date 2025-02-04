@@ -92,6 +92,24 @@ server:
     # and port.
     interface: 0.0.0.0@5335
 
+    # Do not query the following addresses. No DNS queries are sent there.
+    # List one address per entry. List classless netblocks with /size,
+    # do-not-query-address: 127.0.0.1/8
+    do-not-query-address: ::0/0
+
+    # And set prefer-ip6: yes to use the ip6 randomness from a netblock.
+    # Set this to yes to prefer ipv6 upstream servers over ipv4.
+    prefer-ip6: no
+
+    # Prefer ipv4 upstream servers, even if ipv6 is available.
+    prefer-ip4: yes
+
+    # Enable IPv4, "yes" or "no".
+    do-ip4: yes
+
+    # Enable IPv6, "yes" or "no".
+    do-ip6: yes
+
     # Rotates RRSet order in response (the pseudo-random number is taken from
     # the query ID, for speed and thread safety).
     rrset-roundrobin: yes
