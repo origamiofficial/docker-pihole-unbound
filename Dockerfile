@@ -73,8 +73,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         --enable-dnstap \
         --enable-tfo-server \
         --enable-tfo-client \
-        --enable-event-api \
-        --enable-subnet && \
+        --enable-event-api && \
     make install && \
     mv /opt/unbound/etc/unbound/unbound.conf /opt/unbound/etc/unbound/unbound.conf.example && \
     apt-get purge -y --auto-remove \
